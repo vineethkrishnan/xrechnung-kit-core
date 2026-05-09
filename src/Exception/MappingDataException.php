@@ -59,6 +59,21 @@ final class MappingDataException extends XRechnungKitException
         return new self(sprintf('Leitweg-ID must match /^\d{2,12}-[A-Za-z0-9]{1,30}-\d{2}$/ (BT-10), got: %s', self::quote($given)));
     }
 
+    public static function invalidIban(string $given): self
+    {
+        return new self(sprintf('IBAN must be 2 letters + 2 digits + 11..30 alphanumeric chars (no spaces), got: %s', self::quote($given)));
+    }
+
+    public static function invalidBic(string $given): self
+    {
+        return new self(sprintf('BIC must be 4 letters + 2 letters + 2 alphanumeric (+ optional 3 alphanumeric), got: %s', self::quote($given)));
+    }
+
+    public static function missingMandateForDirectDebit(): self
+    {
+        return new self('SEPA Direct Debit (code 59) requires a mandate reference (BT-89)');
+    }
+
     private static function quote(string $value): string
     {
         return '"' . str_replace('"', '\\"', $value) . '"';
