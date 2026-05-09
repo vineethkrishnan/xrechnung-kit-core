@@ -101,31 +101,34 @@ class XRechnungGenerator
      */
     private function generateSummary(): XRechnungGenerator
     {
+        $entity = $this->xRechnungEntity;
+        $amountPrefix = $entity->getInvoiceType() == 'cancel' ? '-' : '';
 
-        $amountPrefix = '';
-        if ($this->xRechnungEntity->getInvoiceType() == 'cancel') {
-            $amountPrefix = '-';
-        }
-        $this->xmlContent = str_replace('{INVOICE_NUMBER}', $this->xRechnungEntity->getInvoiceNumber(), $this->xmlContent);
-        $this->xmlContent = str_replace('{RELATED_INVOICE_NUMBER}', $this->xRechnungEntity->getRelatedInvoiceNumber(), $this->xmlContent);
-        $this->xmlContent = str_replace('{INVOICE_DATE}', $this->xRechnungEntity->getInvoiceDate(), $this->xmlContent);
-        $this->xmlContent = str_replace('{INVOICE_TYPE_CODE}', $this->xRechnungEntity->getTypeCode(), $this->xmlContent);
-        $this->xmlContent = str_replace('{CUSTOMER_NUMBER}', $this->xRechnungEntity->getCustomerNumber(), $this->xmlContent);
-        $this->xmlContent = str_replace('{NOTE}', $this->xRechnungEntity->getNote(), $this->xmlContent);
-        $this->xmlContent = str_replace('{CURRENCY_CODE}', $this->xRechnungEntity->getCurrencyCode(), $this->xmlContent);
-        $this->xmlContent = str_replace('{BUYER_REFERENCE_NUMBER}', $this->xRechnungEntity->getBuyerReferenceNumber(), $this->xmlContent);
-        $this->xmlContent = str_replace('{PAYMENT_CODE}', $this->xRechnungEntity->getPaymentCode(), $this->xmlContent);
-        $this->xmlContent = str_replace('{FINANCIAL_NUMBER}', $this->xRechnungEntity->getFinancialNumber(), $this->xmlContent);
-        $this->xmlContent = str_replace('{PAYMENT_NOTE}', $this->xRechnungEntity->getPaymentNote(), $this->xmlContent);
-        $this->xmlContent = str_replace('{TAX_CATEGORY}', $this->xRechnungEntity->getTaxCategory(), $this->xmlContent);
-        $this->xmlContent = str_replace('{AMOUNT_PREFIX}', $amountPrefix, $this->xmlContent);
-        $this->xmlContent = str_replace('{TAX_AMOUNT}', $amountPrefix == '-' && $this->xRechnungEntity->getTaxAmount() < 0 ? number_format(abs($this->xRechnungEntity->getTaxAmount()), 2, '.', '') : number_format($this->xRechnungEntity->getTaxAmount(), 2, '.', ''), $this->xmlContent);
-        $this->xmlContent = str_replace('{TAX}', $this->xRechnungEntity->getTax(), $this->xmlContent);
-        $this->xmlContent = str_replace('{TAX_SCHEME}', $this->xRechnungEntity->getTaxScheme(), $this->xmlContent);
-        $this->xmlContent = str_replace('{NET_AMOUNT}', $amountPrefix == '-' && $this->xRechnungEntity->getNetAmount() < 0 ? number_format(abs($this->xRechnungEntity->getNetAmount()), 2, '.', '') : number_format($this->xRechnungEntity->getNetAmount(), 2, '.', ''), $this->xmlContent);
-        $this->xmlContent = str_replace('{GROSS_AMOUNT}', $amountPrefix == '-' && $this->xRechnungEntity->getGrossAmount() < 0 ? number_format(abs($this->xRechnungEntity->getGrossAmount()), 2, '.', '') : number_format($this->xRechnungEntity->getGrossAmount(), 2, '.', ''), $this->xmlContent);
-        $this->xmlContent = str_replace('{DOWN_PAYMENT}', $amountPrefix == '-' && $this->xRechnungEntity->getDownPayment() < 0 ? number_format(abs($this->xRechnungEntity->getDownPayment()), 2, '.', '') : number_format($this->xRechnungEntity->getDownPayment(), 2, '.', ''), $this->xmlContent);
-        $this->xmlContent = str_replace('{PAYABLE_AMOUNT}', $amountPrefix == '-' && $this->xRechnungEntity->getPayableAmount() < 0 ? number_format(abs($this->xRechnungEntity->getPayableAmount()), 2, '.', '') : number_format($this->xRechnungEntity->getPayableAmount(), 2, '.', ''), $this->xmlContent);
+        $signedAmount = static fn (mixed $value): string => $amountPrefix == '-' && (float) $value < 0
+            ? number_format(abs((float) $value), 2, '.', '')
+            : number_format((float) $value, 2, '.', '');
+
+        $this->xmlContent = self::fill($this->xmlContent, '{INVOICE_NUMBER}', $entity->getInvoiceNumber());
+        $this->xmlContent = self::fill($this->xmlContent, '{RELATED_INVOICE_NUMBER}', $entity->getRelatedInvoiceNumber());
+        $this->xmlContent = self::fill($this->xmlContent, '{INVOICE_DATE}', $entity->getInvoiceDate());
+        $this->xmlContent = self::fill($this->xmlContent, '{INVOICE_TYPE_CODE}', $entity->getTypeCode());
+        $this->xmlContent = self::fill($this->xmlContent, '{CUSTOMER_NUMBER}', $entity->getCustomerNumber());
+        $this->xmlContent = self::fill($this->xmlContent, '{NOTE}', $entity->getNote());
+        $this->xmlContent = self::fill($this->xmlContent, '{CURRENCY_CODE}', $entity->getCurrencyCode());
+        $this->xmlContent = self::fill($this->xmlContent, '{BUYER_REFERENCE_NUMBER}', $entity->getBuyerReferenceNumber());
+        $this->xmlContent = self::fill($this->xmlContent, '{PAYMENT_CODE}', $entity->getPaymentCode());
+        $this->xmlContent = self::fill($this->xmlContent, '{FINANCIAL_NUMBER}', $entity->getFinancialNumber());
+        $this->xmlContent = self::fill($this->xmlContent, '{PAYMENT_NOTE}', $entity->getPaymentNote());
+        $this->xmlContent = self::fill($this->xmlContent, '{TAX_CATEGORY}', $entity->getTaxCategory());
+        $this->xmlContent = self::fill($this->xmlContent, '{AMOUNT_PREFIX}', $amountPrefix);
+        $this->xmlContent = self::fill($this->xmlContent, '{TAX_AMOUNT}', $signedAmount($entity->getTaxAmount()));
+        $this->xmlContent = self::fill($this->xmlContent, '{TAX}', $entity->getTax());
+        $this->xmlContent = self::fill($this->xmlContent, '{TAX_SCHEME}', $entity->getTaxScheme());
+        $this->xmlContent = self::fill($this->xmlContent, '{NET_AMOUNT}', $signedAmount($entity->getNetAmount()));
+        $this->xmlContent = self::fill($this->xmlContent, '{GROSS_AMOUNT}', $signedAmount($entity->getGrossAmount()));
+        $this->xmlContent = self::fill($this->xmlContent, '{DOWN_PAYMENT}', $signedAmount($entity->getDownPayment()));
+        $this->xmlContent = self::fill($this->xmlContent, '{PAYABLE_AMOUNT}', $signedAmount($entity->getPayableAmount()));
+
         return $this;
     }
 
@@ -136,23 +139,33 @@ class XRechnungGenerator
      */
     private function addCautionDepositReference(): XRechnungGenerator
     {
-
         $cautionReferenceTemplate = '';
         if ($this->xRechnungEntity->getCautionDocuments()) {
             foreach ($this->xRechnungEntity->getCautionDocuments() as $item) {
-                $cautionReferenceTemplate .= str_replace('{REFERENCE_NUMBER}', $item['invoice_number_prefix'] . $item['invoice_number'], XRechnungTemplate::getCautionDepositEntityTemplate());
+                $cautionReferenceTemplate .= self::fill(
+                    XRechnungTemplate::getCautionDepositEntityTemplate(),
+                    '{REFERENCE_NUMBER}',
+                    ($item['invoice_number_prefix'] ?? '') . ($item['invoice_number'] ?? '')
+                );
             }
         }
 
         $depositReferenceTemplate = '';
         if ($this->xRechnungEntity->getDepositDocuments()) {
             foreach ($this->xRechnungEntity->getDepositDocuments() as $item) {
-                $depositReferenceTemplate .= str_replace('{REFERENCE_NUMBER}', $item['invoice_number_prefix'] . $item['invoice_number'], XRechnungTemplate::getCautionDepositEntityTemplate());
+                $depositReferenceTemplate .= self::fill(
+                    XRechnungTemplate::getCautionDepositEntityTemplate(),
+                    '{REFERENCE_NUMBER}',
+                    ($item['invoice_number_prefix'] ?? '') . ($item['invoice_number'] ?? '')
+                );
             }
         }
 
-        // concatenate the caution and deposit entities to the xml content
-        $this->xmlContent = str_replace('{CAUTION_DEPOSIT_REFERENCE}', $cautionReferenceTemplate . $depositReferenceTemplate, $this->xmlContent);
+        $this->xmlContent = self::fill(
+            $this->xmlContent,
+            '{CAUTION_DEPOSIT_REFERENCE}',
+            $cautionReferenceTemplate . $depositReferenceTemplate
+        );
 
         return $this;
     }
@@ -164,22 +177,21 @@ class XRechnungGenerator
      */
     private function addSupplierParty(): XRechnungGenerator
     {
-
+        $entity = $this->xRechnungEntity;
         $supplierParty = XRechnungTemplate::getSupplierPartyTemplate();
-        $supplierParty = str_replace('{EMAIL}', $this->xRechnungEntity->getSupplierEmail(), $supplierParty);
-        $supplierParty = str_replace('{COMPANY_NAME}', $this->xRechnungEntity->getSupplierCompanyName(), $supplierParty);
-        $supplierParty = str_replace('{STREET}', $this->xRechnungEntity->getSupplierStreet(), $supplierParty);
-        $supplierParty = str_replace('{CITY}', $this->xRechnungEntity->getSupplierCity(), $supplierParty);
-        $supplierParty = str_replace('{ZIP}', $this->xRechnungEntity->getSupplierZip(), $supplierParty);
-        $supplierParty = str_replace('{COUNTRY_CODE}', $this->xRechnungEntity->getSupplierCountryCode(), $supplierParty);
-        $supplierParty = str_replace('{COMPANY_ID}', $this->xRechnungEntity->getSupplierCompanyId(), $supplierParty);
-        $supplierParty = str_replace('{VAT}', $this->xRechnungEntity->getSupplierVat(), $supplierParty);
-        $supplierParty = str_replace('{COMPANY_NAME}', $this->xRechnungEntity->getSupplierCompanyName(), $supplierParty);
-        $supplierParty = str_replace('{NAME}', $this->xRechnungEntity->getSupplierName(), $supplierParty);
-        $supplierParty = str_replace('{PHONE}', $this->xRechnungEntity->getSupplierPhone(), $supplierParty);
-        $supplierParty = str_replace('{EMAIL}', $this->xRechnungEntity->getSupplierEmail(), $supplierParty);
 
-        $this->xmlContent = str_replace('{SUPPLIER_PARTY}', $supplierParty, $this->xmlContent);
+        $supplierParty = self::fill($supplierParty, '{EMAIL}', $entity->getSupplierEmail());
+        $supplierParty = self::fill($supplierParty, '{COMPANY_NAME}', $entity->getSupplierCompanyName());
+        $supplierParty = self::fill($supplierParty, '{STREET}', $entity->getSupplierStreet());
+        $supplierParty = self::fill($supplierParty, '{CITY}', $entity->getSupplierCity());
+        $supplierParty = self::fill($supplierParty, '{ZIP}', $entity->getSupplierZip());
+        $supplierParty = self::fill($supplierParty, '{COUNTRY_CODE}', $entity->getSupplierCountryCode());
+        $supplierParty = self::fill($supplierParty, '{COMPANY_ID}', $entity->getSupplierCompanyId());
+        $supplierParty = self::fill($supplierParty, '{VAT}', $entity->getSupplierVat());
+        $supplierParty = self::fill($supplierParty, '{NAME}', $entity->getSupplierName());
+        $supplierParty = self::fill($supplierParty, '{PHONE}', $entity->getSupplierPhone());
+
+        $this->xmlContent = self::fill($this->xmlContent, '{SUPPLIER_PARTY}', $supplierParty);
 
         return $this;
     }
@@ -191,20 +203,22 @@ class XRechnungGenerator
      */
     public function addBuyerParty(): XRechnungGenerator
     {
+        $entity = $this->xRechnungEntity;
         $buyerParty = XRechnungTemplate::getBuyerPartyTemplate();
-        $buyerParty = str_replace('{MAIL}', $this->xRechnungEntity->getBuyerMail(), $buyerParty);
-        $buyerParty = str_replace('{NUMBER}', $this->xRechnungEntity->getBuyerNumber(), $buyerParty);
-        $buyerParty = str_replace('{STREET}', $this->xRechnungEntity->getBuyerStreet(), $buyerParty);
-        $buyerParty = str_replace('{ADDITIONAL_STREET}', $this->xRechnungEntity->getBuyerAdditionalStreet(), $buyerParty);
-        $buyerParty = str_replace('{CITY}', $this->xRechnungEntity->getBuyerCity(), $buyerParty);
-        $buyerParty = str_replace('{ZIP}', $this->xRechnungEntity->getBuyerZip(), $buyerParty);
-        $buyerParty = str_replace('{COUNTRY_CODE}', $this->xRechnungEntity->getBuyerCountryCode(), $buyerParty);
-        $buyerParty = str_replace('{COMPANY_NAME}', $this->xRechnungEntity->getBuyerCompanyName(), $buyerParty);
-        $buyerParty = str_replace('{NAME}', $this->xRechnungEntity->getBuyerName(), $buyerParty);
-        $buyerParty = str_replace('{PHONE}', $this->xRechnungEntity->getBuyerPhone(), $buyerParty);
-        $buyerParty = str_replace('{EMAIL}', $this->xRechnungEntity->getBuyerEmail(), $buyerParty);
 
-        $this->xmlContent = str_replace('{BUYER_PARTY}', $buyerParty, $this->xmlContent);
+        $buyerParty = self::fill($buyerParty, '{MAIL}', $entity->getBuyerMail());
+        $buyerParty = self::fill($buyerParty, '{NUMBER}', $entity->getBuyerNumber());
+        $buyerParty = self::fill($buyerParty, '{STREET}', $entity->getBuyerStreet());
+        $buyerParty = self::fill($buyerParty, '{ADDITIONAL_STREET}', $entity->getBuyerAdditionalStreet());
+        $buyerParty = self::fill($buyerParty, '{CITY}', $entity->getBuyerCity());
+        $buyerParty = self::fill($buyerParty, '{ZIP}', $entity->getBuyerZip());
+        $buyerParty = self::fill($buyerParty, '{COUNTRY_CODE}', $entity->getBuyerCountryCode());
+        $buyerParty = self::fill($buyerParty, '{COMPANY_NAME}', $entity->getBuyerCompanyName());
+        $buyerParty = self::fill($buyerParty, '{NAME}', $entity->getBuyerName());
+        $buyerParty = self::fill($buyerParty, '{PHONE}', $entity->getBuyerPhone());
+        $buyerParty = self::fill($buyerParty, '{EMAIL}', $entity->getBuyerEmail());
+
+        $this->xmlContent = self::fill($this->xmlContent, '{BUYER_PARTY}', $buyerParty);
 
         return $this;
     }
@@ -222,60 +236,54 @@ class XRechnungGenerator
             /** @var XRechnungInvoiceLineItem $lineItem */
             foreach ($this->xRechnungEntity->getLineItems() as $lineItem) {
                 $invoiceLine = $this->getLineItemTemplate();
-                $allowanceChargeTemplate = $this->getAllowanceChargeTemplate();
 
-                $invoiceLine = str_replace('{ITEM_NUMBER}', $lineItem->getItemNumber(), $invoiceLine);
-                $invoiceLine = str_replace('{ITEM_QUANTITY}', $lineItem->getItemQuantity(), $invoiceLine);
-                $invoiceLine = str_replace('{ITEM_PRICE}', number_format($lineItem->getItemPrice(), 2, '.', ''), $invoiceLine);
-                $invoiceLine = str_replace('{ITEM_START_DATE}', $lineItem->getItemStartDate(), $invoiceLine);
-                $invoiceLine = str_replace('{ITEM_END_DATE}', $lineItem->getItemEndDate(), $invoiceLine);
-                $invoiceLine = str_replace('{ITEM_DESCRIPTION}', $lineItem->getItemDescription(), $invoiceLine);
-                $invoiceLine = str_replace('{ITEM_RESOURCE}', $lineItem->getItemResource(), $invoiceLine);
-                $invoiceLine = str_replace('{ITEM_TAX_CATEGORY}', $lineItem->getItemTaxCategory(), $invoiceLine);
-                $invoiceLine = str_replace('{ITEM_TAX}', $lineItem->getItemTax(), $invoiceLine);
-                $invoiceLine = str_replace('{ITEM_TAX_SCHEME}', $lineItem->getItemTaxScheme(), $invoiceLine);
+                $invoiceLine = self::fill($invoiceLine, '{ITEM_NUMBER}', $lineItem->getItemNumber());
+                $invoiceLine = self::fill($invoiceLine, '{ITEM_QUANTITY}', $lineItem->getItemQuantity());
+                $invoiceLine = self::fill($invoiceLine, '{ITEM_PRICE}', number_format((float) $lineItem->getItemPrice(), 2, '.', ''));
+                $invoiceLine = self::fill($invoiceLine, '{ITEM_START_DATE}', $lineItem->getItemStartDate());
+                $invoiceLine = self::fill($invoiceLine, '{ITEM_END_DATE}', $lineItem->getItemEndDate());
+                $invoiceLine = self::fill($invoiceLine, '{ITEM_DESCRIPTION}', $lineItem->getItemDescription());
+                $invoiceLine = self::fill($invoiceLine, '{ITEM_RESOURCE}', $lineItem->getItemResource());
+                $invoiceLine = self::fill($invoiceLine, '{ITEM_TAX_CATEGORY}', $lineItem->getItemTaxCategory());
+                $invoiceLine = self::fill($invoiceLine, '{ITEM_TAX}', $lineItem->getItemTax());
+                $invoiceLine = self::fill($invoiceLine, '{ITEM_TAX_SCHEME}', $lineItem->getItemTaxScheme());
 
-                $unitPrice = number_format($lineItem->getItemUnitPrice(), 2, '.', '');
+                $unitPrice = number_format((float) $lineItem->getItemUnitPrice(), 2, '.', '');
                 $allowanceCharge = '';
                 if ($lineItem->getItemAllowanceCharge() != 0) {
-                    $unitPrice = $lineItem->getItemUnitPrice();
+                    $unitPrice = (string) $lineItem->getItemUnitPrice();
                 }
 
-                $invoiceLine = str_replace('{ITEM_UNIT_PRICE}', $unitPrice, $invoiceLine);
-                $invoiceLine = str_replace('{ITEM_ALLOWANCE_CHARGE}', $allowanceCharge, $invoiceLine);
+                $invoiceLine = self::fill($invoiceLine, '{ITEM_UNIT_PRICE}', $unitPrice);
+                $invoiceLine = self::fill($invoiceLine, '{ITEM_ALLOWANCE_CHARGE}', $allowanceCharge);
 
                 $invoiceLineItems .= $invoiceLine;
             }
         }
 
-        $this->xmlContent = str_replace('{INVOICE_LINE_ITEMS}', $invoiceLineItems, $this->xmlContent);
+        $this->xmlContent = self::fill($this->xmlContent, '{INVOICE_LINE_ITEMS}', $invoiceLineItems);
 
         return $this;
     }
 
     private function getLineItemTemplate(): string
     {
-        if ($this->xRechnungEntity->getInvoiceType() == 'invoice') {
+        $type = $this->xRechnungEntity->getInvoiceType();
+
+        if ($type == 'invoice') {
             return XRechnungTemplate::getInvoiceLineTemplate();
         }
-
-        if ($this->xRechnungEntity->getInvoiceType() == 'caution' || $this->xRechnungEntity->getInvoiceType() == 'deposit') {
+        if ($type == 'caution' || $type == 'deposit') {
             return XRechnungTemplate::getCautionDepositLineTemplate();
         }
-
-        if ($this->xRechnungEntity->getInvoiceType() == 'cancel') {
+        if ($type == 'cancel') {
             return XRechnungTemplate::getCreditLineTemplate();
         }
         return '';
     }
 
-    private function getAllowanceChargeTemplate(): string
-    {
-        return XRechnungTemplate::getAllowanceChargeTemplate();
-    }
-
     /**
-     * The clean function will remove all empty tags from the ERechnung XML content.
+     * The clean function will remove all empty tags from the XRechnung XML content.
      */
     private function clean(): void
     {
@@ -284,5 +292,15 @@ class XRechnungGenerator
             '',
             $this->xmlContent
         );
+    }
+
+    /**
+     * Substitute one placeholder in $haystack, coercing null to ''. PHP 8.4
+     * deprecates passing null to str_replace's $replace; entity getters can
+     * return null whenever a field is not set.
+     */
+    private static function fill(string $haystack, string $placeholder, mixed $value): string
+    {
+        return str_replace($placeholder, (string) ($value ?? ''), $haystack);
     }
 }
