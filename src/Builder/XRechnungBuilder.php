@@ -67,7 +67,13 @@ final class XRechnungBuilder
         $entity->setSupplierCountryCode($seller->address->countryCode);
         $entity->setSupplierEmail(self::sanitize($seller->endpointEmail ?? ''));
         if ($seller->taxId !== null) {
-            $entity->setSupplierVat(self::sanitize($seller->taxId->companyId));
+            // The L3 entity's supplierVat field maps to <PartyTaxScheme>
+            // <TaxScheme><ID> in the template, which is the UBL scheme code
+            // ("VAT" or "FC"), not the company's tax-identification number.
+            // The company-id (e.g. DE123456789) goes to <PartyTaxScheme>
+            // <CompanyID> via supplierCompanyId. Mixing these two up was the
+            // L3-style entity's biggest naming hazard.
+            $entity->setSupplierVat($seller->taxId->schemeId);
             $entity->setSupplierCompanyId(self::sanitize($seller->taxId->companyId));
         }
         if ($seller->contact !== null) {

@@ -70,7 +70,8 @@ final class XRechnungBuilderTest extends TestCase
         self::assertSame('571.20', $entity->getGrossAmount());
         self::assertSame('571.20', $entity->getPayableAmount());
         self::assertSame('Beispiel Lieferant GmbH', $entity->getSupplierCompanyName());
-        self::assertSame('DE123456789', $entity->getSupplierVat());
+        self::assertSame('DE123456789', $entity->getSupplierCompanyId(), 'companyId is the German VAT number');
+        self::assertSame('VAT', $entity->getSupplierVat(), 'supplierVat carries the UBL TaxScheme code, not the company VAT number');
         self::assertSame('Bundesamt fuer XYZ', $entity->getBuyerCompanyName());
         self::assertSame('04011000-12345-67', $entity->getBuyerNumber());
         self::assertCount(1, $entity->getLineItems());

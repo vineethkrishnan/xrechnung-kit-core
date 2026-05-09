@@ -266,6 +266,9 @@ final class XRechnungGenerator
                 $invoiceLine = self::fill($invoiceLine, '{ITEM_UNIT_PRICE}', $unitPrice);
                 $invoiceLine = self::fill($invoiceLine, '{ITEM_ALLOWANCE_CHARGE}', $allowanceCharge);
 
+                if ($invoiceLineItems !== '') {
+                    $invoiceLineItems .= "\n";
+                }
                 $invoiceLineItems .= $invoiceLine;
             }
         }
@@ -292,15 +295,24 @@ final class XRechnungGenerator
     }
 
     /**
-     * The clean function will remove all empty tags from the XRechnung XML content.
+     * Removes empty XML elements from the substituted XML content. Loops until
+     * the content stops shrinking so nested empty elements (e.g. an Invoice
+     * Period wrapping empty StartDate / EndDate) collapse fully on subsequent
+     * passes. Then collapses runs of 3+ blank lines down to a single blank
+     * line so the output reads cleanly after empty placeholder substitution.
      */
     private function clean(): void
     {
-        $this->xmlContent = preg_replace(
-            '/<(\w+:)?\w+[^>]*>\s*<\/\1?\w+>/',
-            '',
-            $this->xmlContent,
-        ) ?? $this->xmlContent;
+        $previous = null;
+        while ($previous !== $this->xmlContent) {
+            $previous = $this->xmlContent;
+            $this->xmlContent = preg_replace(
+                '/<(\w+:)?\w+[^>]*>\s*<\/\1?\w+>/',
+                '',
+                $this->xmlContent,
+            ) ?? $this->xmlContent;
+        }
+        $this->xmlContent = preg_replace('/\n[ \t]*\n[ \t]*\n+/', "\n\n", $this->xmlContent) ?? $this->xmlContent;
     }
 
     /**
