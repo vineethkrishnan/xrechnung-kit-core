@@ -101,6 +101,65 @@ final class XRechnungBuilderTest extends TestCase
     }
 
     #[Test]
+    public function it_picks_caution_template_for_a_partial_invoice_mapping(): void
+    {
+        $mapping = MappingData::partialInvoice(
+            meta: new DocumentMeta(
+                invoiceNumber: 'ANZ-2026-001',
+                type: XRechnungInvoiceTypeCode::CREDIT_NOTE,
+                issueDate: new \DateTimeImmutable('2026-05-09'),
+                currency: 'EUR',
+            ),
+            seller: $this->seller(),
+            buyer: $this->publicBuyer(),
+            lines: [$this->line()],
+            taxes: [$this->tax()],
+            payment: [PaymentMeans::sepaCreditTransfer('DE12500105170648489890')],
+            totals: $this->totals(),
+            period: new DocumentPeriod(
+                new \DateTimeImmutable('2026-05-01'),
+                new \DateTimeImmutable('2026-05-31'),
+            ),
+        );
+
+        $entity = XRechnungBuilder::buildEntity($mapping);
+
+        self::assertSame('caution', $entity->getInvoiceType(), 'Partial invoices flow through the caution template per the L3 deposit alias');
+        self::assertSame(326, $entity->getTypeCode());
+        self::assertSame('ANZ-2026-001', $entity->getInvoiceNumber());
+    }
+
+    #[Test]
+    public function it_builds_a_deposit_cancellation_with_both_prior_reference_and_cancel_template(): void
+    {
+        $mapping = MappingData::depositCancellation(
+            meta: new DocumentMeta(
+                invoiceNumber: 'STORNO-DEP-001',
+                type: XRechnungInvoiceTypeCode::DEBIT_NOTE,
+                issueDate: new \DateTimeImmutable('2026-05-09'),
+                currency: 'EUR',
+            ),
+            seller: $this->seller(),
+            buyer: $this->publicBuyer(),
+            lines: [$this->line()],
+            taxes: [$this->tax()],
+            payment: [PaymentMeans::sepaCreditTransfer('DE12500105170648489890')],
+            totals: $this->totals(),
+            prior: new BillingReference('ANZ-2026-001', new \DateTimeImmutable('2026-04-01')),
+            period: new DocumentPeriod(
+                new \DateTimeImmutable('2026-04-01'),
+                new \DateTimeImmutable('2026-04-30'),
+            ),
+        );
+
+        $entity = XRechnungBuilder::buildEntity($mapping);
+
+        self::assertSame('cancel', $entity->getInvoiceType(), 'Deposit cancellations flow through the cancel template');
+        self::assertSame(381, $entity->getTypeCode());
+        self::assertSame('ANZ-2026-001', $entity->getRelatedInvoiceNumber(), 'Prior reference must surface as RelatedInvoiceNumber on the lifted entity');
+    }
+
+    #[Test]
     public function it_picks_caution_template_for_a_caution_invoice_mapping(): void
     {
         $mapping = MappingData::cautionInvoice(
