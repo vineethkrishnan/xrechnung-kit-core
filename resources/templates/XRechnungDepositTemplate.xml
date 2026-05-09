@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ubl:Invoice xmlns:ubl="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"
+             xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+             xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">
+    <cbc:CustomizationID>urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0</cbc:CustomizationID>
+    <cbc:ProfileID>urn:fdc:peppol.eu:2017:poacc:billing:01:1.0</cbc:ProfileID>
+    <cbc:ID>ANZ-9</cbc:ID><!--C1-->
+    <cbc:IssueDate>2024-07-31</cbc:IssueDate>  <!--C2 - yyyy-mm-dd-->
+    <cbc:InvoiceTypeCode>326</cbc:InvoiceTypeCode><!--Statisch https://docs.peppol.eu/poacc/billing/3.0/codelist/UNCL1001-inv/-->
+    <cbc:Note>Dies ist eine Anzahlungsrechnung</cbc:Note> <!---->
+    <cbc:DocumentCurrencyCode>EUR</cbc:DocumentCurrencyCode> <!--Währung für das gesamte Dokument-->
+    <cbc:BuyerReference>C6</cbc:BuyerReference>
+    <cac:BillingReference>
+        <cac:InvoiceDocumentReference>
+            <cbc:ID>KAU-8</cbc:ID><!--Referenz auf die Kaution-->
+        </cac:InvoiceDocumentReference>
+  </cac:BillingReference>
+    <cac:AccountingSupplierParty>
+        <cac:Party>
+            <cbc:EndpointID schemeID="EM">benedikt.martinez@gmail.com</cbc:EndpointID> <!--A1-->
+            <cac:PartyName>
+                <cbc:Name>Acme Inc.</cbc:Name> <!--A2-->
+            </cac:PartyName>
+            <cac:PostalAddress>
+                <cbc:StreetName>Straße 1</cbc:StreetName> <!--A3-->
+                <cbc:CityName>Stadt</cbc:CityName> <!--A4-->
+                <cbc:PostalZone>12345</cbc:PostalZone> <!--A5-->
+                <cac:Country>
+                    <cbc:IdentificationCode>DE</cbc:IdentificationCode> <!--A6-->
+                </cac:Country>
+            </cac:PostalAddress>
+            <cac:PartyTaxScheme>
+                <cbc:CompanyID>DE 123456789</cbc:CompanyID> <!--A7-->
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID> <!--Statisch-->
+                </cac:TaxScheme>
+            </cac:PartyTaxScheme>
+            <cac:PartyLegalEntity>
+                <cbc:RegistrationName>Acme Inc.</cbc:RegistrationName> <!--A2-->
+            </cac:PartyLegalEntity>
+            <cac:Contact>
+                <cbc:Name>Benedikt Martinez Rodriguez</cbc:Name> <!--A8-->
+                <cbc:Telephone>+49 1234-5678</cbc:Telephone> <!--A9-->
+                <cbc:ElectronicMail>benedikt.martinez@gmail.com</cbc:ElectronicMail> <!--A1-->
+            </cac:Contact>
+        </cac:Party>
+    </cac:AccountingSupplierParty>
+    <cac:AccountingCustomerParty>
+        <cac:Party>
+            <cbc:EndpointID schemeID="EM">buyer@info.de</cbc:EndpointID> <!--B1-->
+            <cac:PartyIdentification>
+                <cbc:ID>100000</cbc:ID><!--B2-->
+            </cac:PartyIdentification>
+            <cac:PostalAddress>
+                <cbc:StreetName>Straße 1</cbc:StreetName><!--B3-->
+                <cbc:AdditionalStreetName>Procurement</cbc:AdditionalStreetName><!--B11-->
+                <cbc:CityName>Berlin</cbc:CityName><!--B4-->
+                <cbc:PostalZone>12345</cbc:PostalZone><!--B5-->
+                <cac:Country>
+                    <cbc:IdentificationCode>DE</cbc:IdentificationCode><!--B6-->
+                </cac:Country>
+            </cac:PostalAddress>
+            <cac:PartyLegalEntity>
+                <cbc:RegistrationName>Test Kunde</cbc:RegistrationName><!--B7-->
+            </cac:PartyLegalEntity>
+            <cac:Contact>
+                <cbc:Name>Maria Musterfrau</cbc:Name> <!--B8-->
+                <cbc:Telephone>+49 1234-5678</cbc:Telephone> <!--B9-->
+                <cbc:ElectronicMail>benedikt.martinez@gmail.com</cbc:ElectronicMail> <!--B10-->
+            </cac:Contact>
+        </cac:Party>
+    </cac:AccountingCustomerParty>
+    <cac:PaymentMeans>
+        <cbc:PaymentMeansCode>58</cbc:PaymentMeansCode>
+        <cac:PayeeFinancialAccount>
+            <!--dies ist eine nicht existerende aber valide IBAN als test dummy -->
+            <cbc:ID>DE75512108001245126199</cbc:ID>
+        </cac:PayeeFinancialAccount>
+    </cac:PaymentMeans>
+    <cac:PaymentTerms>
+        <cbc:Note>C9</cbc:Note>
+    </cac:PaymentTerms>
+    <cac:TaxTotal>
+        <cbc:TaxAmount currencyID="EUR">1.90</cbc:TaxAmount> <!--Ust Betrag-->
+        <cac:TaxSubtotal>
+            <cbc:TaxableAmount currencyID="EUR">10.00</cbc:TaxableAmount> <!--Netto Gesamtpreis C7-->
+            <cbc:TaxAmount currencyID="EUR">1.90</cbc:TaxAmount> <!--Ust Betrag, Steuersatz * Netto Gesamtpreis-->
+            <cac:TaxCategory>
+                <cbc:ID>S</cbc:ID> <!--Steuersatz, E=Exempt-->
+                <cbc:Percent>19</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID> <!--statisch-->
+                </cac:TaxScheme>
+            </cac:TaxCategory>
+        </cac:TaxSubtotal>
+    </cac:TaxTotal>
+    <cac:LegalMonetaryTotal>
+        <cbc:LineExtensionAmount currencyID="EUR">10.00</cbc:LineExtensionAmount> <!--Summe aller Einzelpositionen C7-->
+        <cbc:TaxExclusiveAmount currencyID="EUR">10.00</cbc:TaxExclusiveAmount> <!--Netto Gesamtpreis C7-->
+        <cbc:TaxInclusiveAmount currencyID="EUR">11.90</cbc:TaxInclusiveAmount> <!--Brutto Gesamtpreis C8-->
+        <cbc:PayableAmount currencyID="EUR">11.90</cbc:PayableAmount> <!--Offener Betrag, abzüglich bereits getätigter Zahlungen-->
+    </cac:LegalMonetaryTotal>
+    <cac:InvoiceLine> <!--Repräsentiert eine Position auf der Rechnung-->
+        <cbc:ID>1</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="EA">1</cbc:InvoicedQuantity>  <!--Einheit und Menge, Teil von D5. Einheit in unitCode. XPP=Stück, MIN=Minuten, HUR=Stunden-->
+        <cbc:LineExtensionAmount currencyID="EUR">10.00</cbc:LineExtensionAmount> <!--Betrag der Position D6-->
+        <cac:Item>
+            <cbc:Description>Anzahlung zur Buchung </cbc:Description> <!--Beschreibung des Inventars/Resource/Service-->
+            <cbc:Name>Anzahlung</cbc:Name> <!--Name des Inventars/Resource/Service-->
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>19</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="EUR">10.00</cbc:PriceAmount> <!--Stückpreis, Teil von D5-->
+        </cac:Price>
+    </cac:InvoiceLine>
+</ubl:Invoice>

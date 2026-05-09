@@ -1,0 +1,25 @@
+<cac:AccountingCustomerParty>
+    <cac:Party>
+        <cbc:EndpointID schemeID="EM">{MAIL}</cbc:EndpointID> 
+        <cac:PartyIdentification>
+            <cbc:ID>{NUMBER}</cbc:ID>
+        </cac:PartyIdentification>
+        <cac:PostalAddress>
+            <cbc:StreetName>{STREET}</cbc:StreetName>
+            <cbc:AdditionalStreetName>{ADDITIONAL_STREET}</cbc:AdditionalStreetName>
+            <cbc:CityName>{CITY}</cbc:CityName>
+            <cbc:PostalZone>{ZIP}</cbc:PostalZone>
+            <cac:Country>
+                <cbc:IdentificationCode>{COUNTRY_CODE}</cbc:IdentificationCode>
+            </cac:Country>
+        </cac:PostalAddress>
+        <cac:PartyLegalEntity>
+            <cbc:RegistrationName>{COMPANY_NAME}</cbc:RegistrationName>
+        </cac:PartyLegalEntity>
+        <cac:Contact>
+            <cbc:Name>{NAME}</cbc:Name> 
+            <cbc:Telephone>{PHONE}</cbc:Telephone> 
+            <cbc:ElectronicMail>{EMAIL}</cbc:ElectronicMail> 
+        </cac:Contact>
+    </cac:Party>
+</cac:AccountingCustomerParty>

@@ -1,0 +1,5 @@
+<cac:AllowanceCharge>
+        <cbc:ChargeIndicator>true</cbc:ChargeIndicator>
+        <cbc:Amount currencyID="EUR">{ITEM_ALLOWANCE_CHARGE}</cbc:Amount>
+        <cbc:BaseAmount currencyID="EUR">{ITEM_PRICE}</cbc:BaseAmount>
+</cac:AllowanceCharge>

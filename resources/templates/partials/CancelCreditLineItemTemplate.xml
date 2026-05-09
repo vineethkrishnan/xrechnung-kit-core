@@ -1,0 +1,23 @@
+<cac:CreditNoteLine>
+    <cbc:ID>{ITEM_NUMBER}</cbc:ID>
+    <cbc:CreditedQuantity unitCode="HUR">-{ITEM_QUANTITY}</cbc:CreditedQuantity>
+    <cbc:LineExtensionAmount currencyID="EUR">-{ITEM_PRICE}</cbc:LineExtensionAmount>
+    <cac:InvoicePeriod> 
+        <cbc:StartDate>{ITEM_START_DATE}</cbc:StartDate> 
+        <cbc:EndDate>{ITEM_END_DATE}</cbc:EndDate> 
+    </cac:InvoicePeriod>
+    <cac:Item>
+        <cbc:Description>{ITEM_DESCRIPTION}</cbc:Description>
+        <cbc:Name>{ITEM_RESOURCE}</cbc:Name>
+        <cac:ClassifiedTaxCategory>
+            <cbc:ID>{ITEM_TAX_CATEGORY}</cbc:ID>
+            <cbc:Percent>{ITEM_TAX}</cbc:Percent>
+            <cac:TaxScheme>
+                <cbc:ID>{ITEM_TAX_SCHEME}</cbc:ID>
+            </cac:TaxScheme>
+        </cac:ClassifiedTaxCategory>
+    </cac:Item>
+    <cac:Price>
+        <cbc:PriceAmount currencyID="EUR">-{ITEM_PRICE}</cbc:PriceAmount>
+    </cac:Price>
+</cac:CreditNoteLine>

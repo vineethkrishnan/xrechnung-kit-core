@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CreditNote xmlns="urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2"
+            xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+            xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">
+    <cbc:CustomizationID>urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0</cbc:CustomizationID>
+    <cbc:ProfileID>urn:fdc:peppol.eu:2017:poacc:billing:01:1.0</cbc:ProfileID>
+    <cbc:ID>{INVOICE_NUMBER}</cbc:ID>
+    <cbc:IssueDate>{INVOICE_DATE}</cbc:IssueDate>
+    <cbc:CreditNoteTypeCode>{INVOICE_TYPE_CODE}</cbc:CreditNoteTypeCode>
+    <cbc:DocumentCurrencyCode>{CURRENCY_CODE}</cbc:DocumentCurrencyCode>
+    <cbc:BuyerReference>{BUYER_REFERENCE_NUMBER}</cbc:BuyerReference>
+
+    {CAUTION_DEPOSIT_REFERENCE}
+
+    <cac:BillingReference>
+        <cac:InvoiceDocumentReference>
+            <cbc:ID>{RELATED_INVOICE_NUMBER}</cbc:ID>
+        </cac:InvoiceDocumentReference>
+    </cac:BillingReference>
+
+    {SUPPLIER_PARTY}
+
+    {BUYER_PARTY}
+
+    <cac:PaymentMeans>
+        <cbc:PaymentMeansCode>{PAYMENT_CODE}</cbc:PaymentMeansCode>
+        <cac:PayeeFinancialAccount>
+            <cbc:ID>{FINANCIAL_NUMBER}</cbc:ID>
+        </cac:PayeeFinancialAccount>
+    </cac:PaymentMeans>
+
+    <cac:PaymentTerms>
+        <cbc:Note>{PAYMENT_NOTE}</cbc:Note>
+    </cac:PaymentTerms>
+
+    <cac:TaxTotal>
+        <cbc:TaxAmount currencyID="EUR">{AMOUNT_PREFIX}{TAX_AMOUNT}</cbc:TaxAmount>
+        <cac:TaxSubtotal>
+            <cbc:TaxableAmount currencyID="EUR">{AMOUNT_PREFIX}{NET_AMOUNT}</cbc:TaxableAmount>
+            <cbc:TaxAmount currencyID="EUR">{AMOUNT_PREFIX}{TAX_AMOUNT}</cbc:TaxAmount>
+            <cac:TaxCategory>
+                <cbc:ID>{TAX_CATEGORY}</cbc:ID>
+                <cbc:Percent>{TAX}</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>{TAX_SCHEME}</cbc:ID>
+                </cac:TaxScheme>
+            </cac:TaxCategory>
+        </cac:TaxSubtotal>
+    </cac:TaxTotal>
+
+    <cac:LegalMonetaryTotal>
+        <cbc:LineExtensionAmount currencyID="EUR">{AMOUNT_PREFIX}{NET_AMOUNT}</cbc:LineExtensionAmount>
+        <cbc:TaxExclusiveAmount currencyID="EUR">{AMOUNT_PREFIX}{NET_AMOUNT}</cbc:TaxExclusiveAmount>
+        <cbc:TaxInclusiveAmount currencyID="EUR">{AMOUNT_PREFIX}{GROSS_AMOUNT}</cbc:TaxInclusiveAmount>
+        <cbc:PrepaidAmount currencyID="EUR">{DOWN_PAYMENT}</cbc:PrepaidAmount>
+        <cbc:PayableAmount currencyID="EUR">{AMOUNT_PREFIX}{PAYABLE_AMOUNT}</cbc:PayableAmount>
+    </cac:LegalMonetaryTotal>
+    
+    {INVOICE_LINE_ITEMS}
+    
+</CreditNote>
