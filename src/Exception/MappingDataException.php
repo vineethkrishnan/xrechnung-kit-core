@@ -30,6 +30,11 @@ final class MappingDataException extends XRechnungKitException
         return new self(sprintf('Money amount must be a decimal string with optional leading minus sign, got: %s', self::quote($given)));
     }
 
+    public static function invalidDecimal(string $field, string $given): self
+    {
+        return new self(sprintf('%s must be a decimal string with optional leading minus sign, got: %s', $field, self::quote($given)));
+    }
+
     public static function currencyMismatch(string $left, string $right): self
     {
         return new self(sprintf('Currency mismatch: %s vs %s', $left, $right));
