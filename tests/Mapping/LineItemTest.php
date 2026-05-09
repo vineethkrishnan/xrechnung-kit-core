@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace XrechnungKit\Tests\Mapping;
 
+use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use XrechnungKit\Exception\MappingDataException;
@@ -50,8 +51,8 @@ final class LineItemTest extends TestCase
             taxPercent: '19',
             name: 'Hosting subscription',
             period: new DocumentPeriod(
-                new \DateTimeImmutable('2026-05-01'),
-                new \DateTimeImmutable('2026-05-31'),
+                new DateTimeImmutable('2026-05-01'),
+                new DateTimeImmutable('2026-05-31'),
             ),
         );
 

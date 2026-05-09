@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace XrechnungKit;
 
 final class XRechnungEntity
@@ -60,7 +62,7 @@ final class XRechnungEntity
         return $this->typeCode;
     }
 
-    public function setTypeCode(mixed $typeCode): XRechnungEntity
+    public function setTypeCode(mixed $typeCode): self
     {
         $this->typeCode = $typeCode;
         return $this;
@@ -71,7 +73,7 @@ final class XRechnungEntity
         return $this->note;
     }
 
-    public function setNote(mixed $note): XRechnungEntity
+    public function setNote(mixed $note): self
     {
         $this->note = $note;
         return $this;
@@ -82,7 +84,7 @@ final class XRechnungEntity
         return $this->currencyCode;
     }
 
-    public function setCurrencyCode(mixed $currencyCode): XRechnungEntity
+    public function setCurrencyCode(mixed $currencyCode): self
     {
         $this->currencyCode = $currencyCode;
         return $this;
@@ -93,7 +95,7 @@ final class XRechnungEntity
         return $this->buyerReferenceNumber;
     }
 
-    public function setBuyerReferenceNumber(mixed $buyerReferenceNumber): XRechnungEntity
+    public function setBuyerReferenceNumber(mixed $buyerReferenceNumber): self
     {
         $this->buyerReferenceNumber = $buyerReferenceNumber;
         return $this;
@@ -104,7 +106,7 @@ final class XRechnungEntity
         return $this->paymentCode;
     }
 
-    public function setPaymentCode(mixed $paymentCode): XRechnungEntity
+    public function setPaymentCode(mixed $paymentCode): self
     {
         $this->paymentCode = $paymentCode;
         return $this;
@@ -115,7 +117,7 @@ final class XRechnungEntity
         return $this->financialNumber;
     }
 
-    public function setFinancialNumber(mixed $financialNumber): XRechnungEntity
+    public function setFinancialNumber(mixed $financialNumber): self
     {
         $this->financialNumber = $financialNumber;
         return $this;
@@ -126,7 +128,7 @@ final class XRechnungEntity
         return $this->paymentNote;
     }
 
-    public function setPaymentNote(mixed $paymentNote): XRechnungEntity
+    public function setPaymentNote(mixed $paymentNote): self
     {
         $this->paymentNote = $paymentNote;
         return $this;
@@ -137,7 +139,7 @@ final class XRechnungEntity
         return $this->taxCategory;
     }
 
-    public function setTaxCategory(mixed $taxCategory): XRechnungEntity
+    public function setTaxCategory(mixed $taxCategory): self
     {
         $this->taxCategory = $taxCategory;
         return $this;
@@ -148,7 +150,7 @@ final class XRechnungEntity
         return $this->tax;
     }
 
-    public function setTax(mixed $tax): XRechnungEntity
+    public function setTax(mixed $tax): self
     {
         $this->tax = $tax;
         return $this;
@@ -159,7 +161,7 @@ final class XRechnungEntity
         return $this->taxScheme;
     }
 
-    public function setTaxScheme(mixed $taxScheme): XRechnungEntity
+    public function setTaxScheme(mixed $taxScheme): self
     {
         $this->taxScheme = $taxScheme;
         return $this;
@@ -170,7 +172,7 @@ final class XRechnungEntity
         return $this->downPayment;
     }
 
-    public function setDownPayment(mixed $downPayment): XRechnungEntity
+    public function setDownPayment(mixed $downPayment): self
     {
         $this->downPayment = $downPayment;
         return $this;
@@ -181,7 +183,7 @@ final class XRechnungEntity
         return $this->payableAmount;
     }
 
-    public function setPayableAmount(mixed $payableAmount): XRechnungEntity
+    public function setPayableAmount(mixed $payableAmount): self
     {
         $this->payableAmount = $payableAmount;
         return $this;
@@ -194,7 +196,7 @@ final class XRechnungEntity
     }
 
     /** @param array<int, array<string, mixed>> $cautionDocuments */
-    public function setCautionDocuments(array $cautionDocuments = []): XRechnungEntity
+    public function setCautionDocuments(array $cautionDocuments = []): self
     {
         $this->cautionDocuments = $cautionDocuments;
         return $this;
@@ -207,7 +209,7 @@ final class XRechnungEntity
     }
 
     /** @param array<int, array<string, mixed>> $depositDocuments */
-    public function setDepositDocuments(array $depositDocuments = []): XRechnungEntity
+    public function setDepositDocuments(array $depositDocuments = []): self
     {
         $this->depositDocuments = $depositDocuments;
         return $this;
@@ -218,7 +220,7 @@ final class XRechnungEntity
         return $this->supplierEmail;
     }
 
-    public function setSupplierEmail(mixed $supplierEmail): XRechnungEntity
+    public function setSupplierEmail(mixed $supplierEmail): self
     {
         $this->supplierEmail = $supplierEmail;
         return $this;
@@ -229,7 +231,7 @@ final class XRechnungEntity
         return $this->supplierCompanyName;
     }
 
-    public function setSupplierCompanyName(mixed $supplierCompanyName): XRechnungEntity
+    public function setSupplierCompanyName(mixed $supplierCompanyName): self
     {
         $this->supplierCompanyName = $supplierCompanyName;
         return $this;
@@ -240,7 +242,7 @@ final class XRechnungEntity
         return $this->supplierStreet;
     }
 
-    public function setSupplierStreet(mixed $supplierStreet): XRechnungEntity
+    public function setSupplierStreet(mixed $supplierStreet): self
     {
         $this->supplierStreet = $supplierStreet;
         return $this;
@@ -251,7 +253,7 @@ final class XRechnungEntity
         return $this->supplierCity;
     }
 
-    public function setSupplierCity(mixed $supplierCity): XRechnungEntity
+    public function setSupplierCity(mixed $supplierCity): self
     {
         $this->supplierCity = $supplierCity;
         return $this;
@@ -262,7 +264,7 @@ final class XRechnungEntity
         return $this->supplierZip;
     }
 
-    public function setSupplierZip(mixed $supplierZip): XRechnungEntity
+    public function setSupplierZip(mixed $supplierZip): self
     {
         $this->supplierZip = $supplierZip;
         return $this;
@@ -273,7 +275,7 @@ final class XRechnungEntity
         return $this->supplierCountryCode;
     }
 
-    public function setSupplierCountryCode(mixed $supplierCountryCode): XRechnungEntity
+    public function setSupplierCountryCode(mixed $supplierCountryCode): self
     {
         $this->supplierCountryCode = $supplierCountryCode;
         return $this;
@@ -284,7 +286,7 @@ final class XRechnungEntity
         return $this->supplierCompanyId;
     }
 
-    public function setSupplierCompanyId(mixed $supplierCompanyId): XRechnungEntity
+    public function setSupplierCompanyId(mixed $supplierCompanyId): self
     {
         $this->supplierCompanyId = $supplierCompanyId;
         return $this;
@@ -295,7 +297,7 @@ final class XRechnungEntity
         return $this->supplierVat;
     }
 
-    public function setSupplierVat(mixed $supplierVat): XRechnungEntity
+    public function setSupplierVat(mixed $supplierVat): self
     {
         $this->supplierVat = $supplierVat;
         return $this;
@@ -306,7 +308,7 @@ final class XRechnungEntity
         return $this->supplierName;
     }
 
-    public function setSupplierName(mixed $supplierName): XRechnungEntity
+    public function setSupplierName(mixed $supplierName): self
     {
         $this->supplierName = $supplierName;
         return $this;
@@ -317,7 +319,7 @@ final class XRechnungEntity
         return $this->supplierPhone;
     }
 
-    public function setSupplierPhone(mixed $supplierPhone): XRechnungEntity
+    public function setSupplierPhone(mixed $supplierPhone): self
     {
         $this->supplierPhone = $supplierPhone;
         return $this;
@@ -328,7 +330,7 @@ final class XRechnungEntity
         return $this->buyerMail;
     }
 
-    public function setBuyerMail(mixed $buyerMail): XRechnungEntity
+    public function setBuyerMail(mixed $buyerMail): self
     {
         $this->buyerMail = $buyerMail;
         return $this;
@@ -339,7 +341,7 @@ final class XRechnungEntity
         return $this->buyerNumber;
     }
 
-    public function setBuyerNumber(mixed $buyerNumber): XRechnungEntity
+    public function setBuyerNumber(mixed $buyerNumber): self
     {
         $this->buyerNumber = $buyerNumber;
         return $this;
@@ -350,7 +352,7 @@ final class XRechnungEntity
         return $this->buyerStreet;
     }
 
-    public function setBuyerStreet(mixed $buyerStreet): XRechnungEntity
+    public function setBuyerStreet(mixed $buyerStreet): self
     {
         $this->buyerStreet = $buyerStreet;
         return $this;
@@ -361,7 +363,7 @@ final class XRechnungEntity
         return $this->buyerAdditionalStreet;
     }
 
-    public function setBuyerAdditionalStreet(mixed $buyerAdditionalStreet): XRechnungEntity
+    public function setBuyerAdditionalStreet(mixed $buyerAdditionalStreet): self
     {
         $this->buyerAdditionalStreet = $buyerAdditionalStreet;
         return $this;
@@ -372,7 +374,7 @@ final class XRechnungEntity
         return $this->buyerCity;
     }
 
-    public function setBuyerCity(mixed $buyerCity): XRechnungEntity
+    public function setBuyerCity(mixed $buyerCity): self
     {
         $this->buyerCity = $buyerCity;
         return $this;
@@ -383,7 +385,7 @@ final class XRechnungEntity
         return $this->buyerZip;
     }
 
-    public function setBuyerZip(mixed $buyerZip): XRechnungEntity
+    public function setBuyerZip(mixed $buyerZip): self
     {
         $this->buyerZip = $buyerZip;
         return $this;
@@ -394,7 +396,7 @@ final class XRechnungEntity
         return $this->buyerCountryCode;
     }
 
-    public function setBuyerCountryCode(mixed $buyerCountryCode): XRechnungEntity
+    public function setBuyerCountryCode(mixed $buyerCountryCode): self
     {
         $this->buyerCountryCode = $buyerCountryCode;
         return $this;
@@ -405,7 +407,7 @@ final class XRechnungEntity
         return $this->buyerCompanyName;
     }
 
-    public function setBuyerCompanyName(mixed $buyerCompanyName): XRechnungEntity
+    public function setBuyerCompanyName(mixed $buyerCompanyName): self
     {
         $this->buyerCompanyName = $buyerCompanyName;
         return $this;
@@ -416,7 +418,7 @@ final class XRechnungEntity
         return $this->buyerPhone;
     }
 
-    public function setBuyerPhone(mixed $buyerPhone): XRechnungEntity
+    public function setBuyerPhone(mixed $buyerPhone): self
     {
         $this->buyerPhone = $buyerPhone;
         return $this;
@@ -427,7 +429,7 @@ final class XRechnungEntity
         return $this->buyerEmail;
     }
 
-    public function setBuyerEmail(mixed $buyerEmail): XRechnungEntity
+    public function setBuyerEmail(mixed $buyerEmail): self
     {
         $this->buyerEmail = $buyerEmail;
         return $this;
@@ -449,7 +451,7 @@ final class XRechnungEntity
         return $this->invoiceNumber;
     }
 
-    public function setInvoiceNumber(mixed $invoiceNumber): XRechnungEntity
+    public function setInvoiceNumber(mixed $invoiceNumber): self
     {
         $this->invoiceNumber = $invoiceNumber;
         return $this;
@@ -460,7 +462,7 @@ final class XRechnungEntity
         return $this->invoiceDate;
     }
 
-    public function setInvoiceDate(mixed $invoiceDate): XRechnungEntity
+    public function setInvoiceDate(mixed $invoiceDate): self
     {
         $this->invoiceDate = $invoiceDate;
         return $this;
@@ -471,7 +473,7 @@ final class XRechnungEntity
         return $this->customerNumber;
     }
 
-    public function setCustomerNumber(mixed $customerNumber): XRechnungEntity
+    public function setCustomerNumber(mixed $customerNumber): self
     {
         $this->customerNumber = $customerNumber;
         return $this;
@@ -482,7 +484,7 @@ final class XRechnungEntity
         return $this->netAmount;
     }
 
-    public function setNetAmount(mixed $netAmount): XRechnungEntity
+    public function setNetAmount(mixed $netAmount): self
     {
         $this->netAmount = $netAmount;
         return $this;
@@ -493,7 +495,7 @@ final class XRechnungEntity
         return $this->taxAmount;
     }
 
-    public function setTaxAmount(mixed $taxAmount): XRechnungEntity
+    public function setTaxAmount(mixed $taxAmount): self
     {
         $this->taxAmount = $taxAmount;
         return $this;
@@ -504,7 +506,7 @@ final class XRechnungEntity
         return $this->grossAmount;
     }
 
-    public function setGrossAmount(mixed $grossAmount): XRechnungEntity
+    public function setGrossAmount(mixed $grossAmount): self
     {
         $this->grossAmount = $grossAmount;
         return $this;
@@ -515,7 +517,7 @@ final class XRechnungEntity
         return $this->buyerName;
     }
 
-    public function setBuyerName(mixed $buyerName): XRechnungEntity
+    public function setBuyerName(mixed $buyerName): self
     {
         $this->buyerName = $buyerName;
         return $this;
@@ -526,7 +528,7 @@ final class XRechnungEntity
         return $this->invoiceType;
     }
 
-    public function setInvoiceType(mixed $invoiceType): XRechnungEntity
+    public function setInvoiceType(mixed $invoiceType): self
     {
         $this->invoiceType = $invoiceType;
         return $this;
@@ -537,7 +539,7 @@ final class XRechnungEntity
         return $this->relatedInvoiceNumber;
     }
 
-    public function setRelatedInvoiceNumber(mixed $relatedInvoiceNumber): XRechnungEntity
+    public function setRelatedInvoiceNumber(mixed $relatedInvoiceNumber): self
     {
         $this->relatedInvoiceNumber = $relatedInvoiceNumber;
         return $this;

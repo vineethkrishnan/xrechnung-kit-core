@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace XrechnungKit\Tests\Smoke;
 
+use Override;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use XrechnungKit\XRechnungEntity;
@@ -15,13 +16,13 @@ final class GeneratorSmokeTest extends TestCase
 {
     private string $outputPath;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         $this->outputPath = sys_get_temp_dir() . '/xrechnung-kit-smoke-' . uniqid('', true) . '.xml';
     }
 
-    #[\Override]
+    #[Override]
     protected function tearDown(): void
     {
         $invalidPath = preg_replace('/\.xml$/', '_invalid.xml', $this->outputPath);
@@ -63,7 +64,7 @@ final class GeneratorSmokeTest extends TestCase
         self::assertTrue(
             $isValid,
             "Generated XML failed XSD validation. Errors:\n  - "
-            . implode("\n  - ", $validator->getErrors())
+            . implode("\n  - ", $validator->getErrors()),
         );
     }
 

@@ -1,6 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace XrechnungKit;
+
+use DOMDocument;
+use LibXMLError;
 
 /**
  * Validates XRechnung XML against the bundled UBL XSD schema. Both an
@@ -21,7 +26,7 @@ class XRechnungValidator
     public function __construct(string $xsdFile = '')
     {
         if (!file_exists($xsdFile)) {
-            $xsdFile = dirname(__DIR__) . '/resources/schemas/XRechnungSchema.xsd';
+            $xsdFile = \dirname(__DIR__) . '/resources/schemas/XRechnungSchema.xsd';
         }
         $this->xsdFile = $xsdFile;
     }
@@ -35,7 +40,7 @@ class XRechnungValidator
     {
         $this->errors = [];
 
-        $document = new \DOMDocument();
+        $document = new DOMDocument();
         $previousInternalErrors = libxml_use_internal_errors(true);
         libxml_clear_errors();
 
@@ -87,14 +92,14 @@ class XRechnungValidator
     /**
      * Formats libxml error messages.
      */
-    private function formatLibxmlError(\LibXMLError $error): string
+    private function formatLibxmlError(LibXMLError $error): string
     {
-        return sprintf(
+        return \sprintf(
             'Error %d at line %d, column %d: %s',
             $error->code,
             $error->line,
             $error->column,
-            trim($error->message)
+            trim($error->message),
         );
     }
 

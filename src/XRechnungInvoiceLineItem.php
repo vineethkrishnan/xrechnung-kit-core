@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace XrechnungKit;
 
 final class XRechnungInvoiceLineItem
@@ -22,7 +24,7 @@ final class XRechnungInvoiceLineItem
         return $this->itemNumber;
     }
 
-    public function setItemNumber(mixed $itemNumber): XRechnungInvoiceLineItem
+    public function setItemNumber(mixed $itemNumber): self
     {
         $this->itemNumber = $itemNumber;
         return $this;
@@ -33,7 +35,7 @@ final class XRechnungInvoiceLineItem
         return $this->itemQuantity;
     }
 
-    public function setItemQuantity(mixed $itemQuantity): XRechnungInvoiceLineItem
+    public function setItemQuantity(mixed $itemQuantity): self
     {
         $this->itemQuantity = $itemQuantity;
         return $this;
@@ -44,7 +46,7 @@ final class XRechnungInvoiceLineItem
         return $this->itemPrice;
     }
 
-    public function setItemPrice(mixed $itemPrice): XRechnungInvoiceLineItem
+    public function setItemPrice(mixed $itemPrice): self
     {
         $this->itemPrice = $itemPrice;
         return $this;
@@ -55,7 +57,7 @@ final class XRechnungInvoiceLineItem
         return $this->itemStartDate;
     }
 
-    public function setItemStartDate(mixed $itemStartDate): XRechnungInvoiceLineItem
+    public function setItemStartDate(mixed $itemStartDate): self
     {
         $this->itemStartDate = $itemStartDate;
         return $this;
@@ -66,7 +68,7 @@ final class XRechnungInvoiceLineItem
         return $this->itemEndDate;
     }
 
-    public function setItemEndDate(mixed $itemEndDate): XRechnungInvoiceLineItem
+    public function setItemEndDate(mixed $itemEndDate): self
     {
         $this->itemEndDate = $itemEndDate;
         return $this;
@@ -77,7 +79,7 @@ final class XRechnungInvoiceLineItem
         return $this->itemDescription;
     }
 
-    public function setItemDescription(mixed $itemDescription): XRechnungInvoiceLineItem
+    public function setItemDescription(mixed $itemDescription): self
     {
         $this->itemDescription = $itemDescription;
         return $this;
@@ -88,7 +90,7 @@ final class XRechnungInvoiceLineItem
         return $this->itemResource;
     }
 
-    public function setItemResource(mixed $itemResource): XRechnungInvoiceLineItem
+    public function setItemResource(mixed $itemResource): self
     {
         $this->itemResource = $itemResource;
         return $this;
@@ -99,7 +101,7 @@ final class XRechnungInvoiceLineItem
         return $this->itemTaxCategory;
     }
 
-    public function setItemTaxCategory(mixed $itemTaxCategory): XRechnungInvoiceLineItem
+    public function setItemTaxCategory(mixed $itemTaxCategory): self
     {
         $this->itemTaxCategory = $itemTaxCategory;
         return $this;
@@ -110,7 +112,7 @@ final class XRechnungInvoiceLineItem
         return $this->itemTax;
     }
 
-    public function setItemTax(mixed $itemTax): XRechnungInvoiceLineItem
+    public function setItemTax(mixed $itemTax): self
     {
         $this->itemTax = $itemTax;
         return $this;
@@ -121,7 +123,7 @@ final class XRechnungInvoiceLineItem
         return $this->itemTaxScheme;
     }
 
-    public function setItemTaxScheme(mixed $itemTaxScheme): XRechnungInvoiceLineItem
+    public function setItemTaxScheme(mixed $itemTaxScheme): self
     {
         $this->itemTaxScheme = $itemTaxScheme;
         return $this;
@@ -132,7 +134,7 @@ final class XRechnungInvoiceLineItem
         return $this->itemUnitPrice;
     }
 
-    public function setItemUnitPrice(mixed $itemUnitPrice): XRechnungInvoiceLineItem
+    public function setItemUnitPrice(mixed $itemUnitPrice): self
     {
         $this->itemUnitPrice = $itemUnitPrice;
         return $this;
@@ -143,7 +145,7 @@ final class XRechnungInvoiceLineItem
         return $this->itemAllowanceCharge;
     }
 
-    public function setItemAllowanceCharge(mixed $itemAllowanceCharge): XRechnungInvoiceLineItem
+    public function setItemAllowanceCharge(mixed $itemAllowanceCharge): self
     {
         $this->itemAllowanceCharge = $itemAllowanceCharge;
         return $this;

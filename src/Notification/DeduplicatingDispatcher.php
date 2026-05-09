@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace XrechnungKit\Notification;
 
+use Closure;
+use Override;
+
 /**
  * Decorator that drops repeated notifications with the same signature within a
  * configurable TTL window. Cache is in-process; horizontally-scaled deployments
@@ -15,16 +18,16 @@ final class DeduplicatingDispatcher implements NotificationDispatcherInterface
     private array $lastEmitted = [];
 
     /**
-     * @param (\Closure(): int)|null $clock Injectable now() for deterministic tests; defaults to time().
+     * @param (Closure(): int)|null $clock Injectable now() for deterministic tests; defaults to time().
      */
     public function __construct(
         private readonly NotificationDispatcherInterface $inner,
         private readonly int $ttlSeconds = 1800,
-        private readonly ?\Closure $clock = null
+        private readonly ?Closure $clock = null,
     ) {
     }
 
-    #[\Override]
+    #[Override]
     public function dispatch(Notification $notification): void
     {
         $now = $this->now();

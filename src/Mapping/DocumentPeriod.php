@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace XrechnungKit\Mapping;
 
+use DateTimeImmutable;
 use XrechnungKit\Exception\MappingDataException;
 
 /**
@@ -18,8 +19,8 @@ use XrechnungKit\Exception\MappingDataException;
 final class DocumentPeriod
 {
     public function __construct(
-        public readonly \DateTimeImmutable $start,
-        public readonly \DateTimeImmutable $end,
+        public readonly DateTimeImmutable $start,
+        public readonly DateTimeImmutable $end,
     ) {
         if ($end < $start) {
             throw MappingDataException::invalidPeriod($start, $end);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace XrechnungKit\Tests\DocumentTypes;
 
+use Override;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use XrechnungKit\AtomicWriter;
@@ -32,7 +33,7 @@ final class DocumentTypeCoverageTest extends TestCase
     /** @var list<string> */
     private array $cleanupPaths = [];
 
-    #[\Override]
+    #[Override]
     protected function tearDown(): void
     {
         foreach ($this->cleanupPaths as $path) {

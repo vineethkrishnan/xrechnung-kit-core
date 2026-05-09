@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace XrechnungKit;
 
 final class XRechnungConstant
 {
-
     // Payment means codes
 
     public const PAYMENT_MEANS_CODE_FOR_CASH = 10;

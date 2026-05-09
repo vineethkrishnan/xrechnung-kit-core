@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace XrechnungKit\Notification\Channel;
 
+use Closure;
+use Override;
+use Throwable;
 use XrechnungKit\Notification\Notification;
 use XrechnungKit\Notification\NotificationChannelInterface;
 use XrechnungKit\Notification\Severity;
@@ -20,8 +23,8 @@ use XrechnungKit\Notification\Severity;
  */
 final class SlackChannel implements NotificationChannelInterface
 {
-    /** @var \Closure(string, array<int, string>, string): void */
-    private \Closure $httpClient;
+    /** @var Closure(string, array<int, string>, string): void */
+    private Closure $httpClient;
 
     /**
      * @param string $webhookUrl Slack incoming webhook URL.
@@ -35,18 +38,18 @@ final class SlackChannel implements NotificationChannelInterface
         private readonly string $name = 'slack',
         private readonly ?string $username = null,
         private readonly ?string $iconEmoji = null,
-        ?callable $httpClient = null
+        ?callable $httpClient = null,
     ) {
         $this->httpClient = $httpClient !== null
-            ? \Closure::fromCallable($httpClient)
+            ? Closure::fromCallable($httpClient)
             : self::defaultHttpClient();
     }
 
-    #[\Override]
+    #[Override]
     public function send(Notification $notification): void
     {
         $payload = [
-            'text' => sprintf("*%s*\n%s", $notification->title, $notification->body),
+            'text' => \sprintf("*%s*\n%s", $notification->title, $notification->body),
         ];
         if ($this->username !== null) {
             $payload['username'] = $this->username;
@@ -59,12 +62,12 @@ final class SlackChannel implements NotificationChannelInterface
                 ['Content-Type: application/json'],
                 json_encode($payload, JSON_THROW_ON_ERROR)
             );
-        } catch (\Throwable) {
+        } catch (Throwable) {
             // Notification delivery is best-effort; never crash the pipeline.
         }
     }
 
-    #[\Override]
+    #[Override]
     public function name(): string
     {
         return $this->name;
@@ -80,20 +83,20 @@ final class SlackChannel implements NotificationChannelInterface
         };
     }
 
-    private static function defaultHttpClient(): \Closure
+    private static function defaultHttpClient(): Closure
     {
         return static function (string $url, array $headers, string $body): void {
-            $context = \stream_context_create([
+            $context = stream_context_create([
                 'http' => [
                     'method' => 'POST',
-                    'header' => implode("\r\n", array_map(static fn (mixed $v): string => is_scalar($v) ? (string) $v : '', $headers)),
+                    'header' => implode("\r\n", array_map(static fn (mixed $v): string => \is_scalar($v) ? (string) $v : '', $headers)),
                     'content' => $body,
                     'timeout' => 5,
                     'ignore_errors' => true,
                     'protocol_version' => 1.1,
                 ],
             ]);
-            @\file_get_contents($url, false, $context);
+            @file_get_contents($url, false, $context);
         };
     }
 }

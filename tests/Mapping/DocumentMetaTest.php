@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace XrechnungKit\Tests\Mapping;
 
+use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use XrechnungKit\Exception\MappingDataException;
@@ -18,7 +19,7 @@ final class DocumentMetaTest extends TestCase
         $meta = new DocumentMeta(
             invoiceNumber: 'RE-2026-0001',
             type: XRechnungInvoiceTypeCode::COMMERCIAL_INVOICE,
-            issueDate: new \DateTimeImmutable('2026-05-01'),
+            issueDate: new DateTimeImmutable('2026-05-01'),
             currency: 'EUR',
         );
 
@@ -36,9 +37,9 @@ final class DocumentMetaTest extends TestCase
         $meta = new DocumentMeta(
             invoiceNumber: 'RE-2026-0001',
             type: XRechnungInvoiceTypeCode::COMMERCIAL_INVOICE,
-            issueDate: new \DateTimeImmutable('2026-05-01'),
+            issueDate: new DateTimeImmutable('2026-05-01'),
             currency: 'EUR',
-            dueDate: new \DateTimeImmutable('2026-05-31'),
+            dueDate: new DateTimeImmutable('2026-05-31'),
             buyerReference: '04011000-12345-67',
             note: 'Net 30 days',
         );
@@ -55,7 +56,7 @@ final class DocumentMetaTest extends TestCase
         $this->expectException(MappingDataException::class);
         $this->expectExceptionMessageMatches('/invoiceNumber/');
 
-        new DocumentMeta('', XRechnungInvoiceTypeCode::COMMERCIAL_INVOICE, new \DateTimeImmutable(), 'EUR');
+        new DocumentMeta('', XRechnungInvoiceTypeCode::COMMERCIAL_INVOICE, new DateTimeImmutable(), 'EUR');
     }
 
     #[Test]
@@ -64,7 +65,7 @@ final class DocumentMetaTest extends TestCase
         $this->expectException(MappingDataException::class);
         $this->expectExceptionMessageMatches('/Currency must be ISO 4217/');
 
-        new DocumentMeta('RE-1', XRechnungInvoiceTypeCode::COMMERCIAL_INVOICE, new \DateTimeImmutable(), 'eur');
+        new DocumentMeta('RE-1', XRechnungInvoiceTypeCode::COMMERCIAL_INVOICE, new DateTimeImmutable(), 'eur');
     }
 
     #[Test]
@@ -76,9 +77,9 @@ final class DocumentMetaTest extends TestCase
         new DocumentMeta(
             invoiceNumber: 'RE-1',
             type: XRechnungInvoiceTypeCode::COMMERCIAL_INVOICE,
-            issueDate: new \DateTimeImmutable('2026-05-31'),
+            issueDate: new DateTimeImmutable('2026-05-31'),
             currency: 'EUR',
-            dueDate: new \DateTimeImmutable('2026-05-01'),
+            dueDate: new DateTimeImmutable('2026-05-01'),
         );
     }
 }

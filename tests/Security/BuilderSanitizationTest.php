@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace XrechnungKit\Tests\Security;
 
+use DateTimeImmutable;
+use Override;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use XrechnungKit\Builder\XRechnungBuilder;
@@ -35,7 +37,7 @@ final class BuilderSanitizationTest extends TestCase
     /** @var list<string> */
     private array $cleanupPaths = [];
 
-    #[\Override]
+    #[Override]
     protected function tearDown(): void
     {
         foreach ($this->cleanupPaths as $path) {
@@ -157,7 +159,7 @@ final class BuilderSanitizationTest extends TestCase
                 ->setItemTaxScheme('VAT')
                 ->setItemAllowanceCharge(0)
                 ->setItemStartDate('2026-05-01')
-                ->setItemEndDate('2026-05-09')
+                ->setItemEndDate('2026-05-09'),
         );
 
         $path = sys_get_temp_dir() . '/xrechnung-kit-injection-' . uniqid('', true) . '.xml';
@@ -179,7 +181,7 @@ final class BuilderSanitizationTest extends TestCase
             meta: new DocumentMeta(
                 invoiceNumber: 'RE-SEC-001',
                 type: XRechnungInvoiceTypeCode::COMMERCIAL_INVOICE,
-                issueDate: new \DateTimeImmutable('2026-05-09'),
+                issueDate: new DateTimeImmutable('2026-05-09'),
                 currency: 'EUR',
                 buyerReference: '04011000-12345-67',
             ),

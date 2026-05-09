@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace XrechnungKit;
 
 /**
@@ -11,13 +13,14 @@ final class XRechnungTemplate
 {
     private static function templatesDir(): string
     {
-        return dirname(__DIR__) . '/resources/templates';
+        return \dirname(__DIR__) . '/resources/templates';
     }
 
     /**
      * Returns the content of the XRechnung template file.
      *
      * @param string|null $type The type of the template file. Default is 'invoice'.
+     *
      * @return string The content of the template file as a string.
      */
     public static function getTemplate(?string $type = 'invoice'): string
@@ -116,41 +119,41 @@ final class XRechnungTemplate
     public static function defaultContent(): string
     {
         return <<<XML
-<?xml version="1.0" encoding="UTF-8"?>
-<rsm:CrossIndustryInvoice xmlns:rsm="urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100"
-                          xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100"
-                          xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100">
-    <rsm:ExchangedDocumentContext>
-        <ram:TestIndicator>
-            <udt:Indicator>false</udt:Indicator>
-        </ram:TestIndicator>
-    </rsm:ExchangedDocumentContext>
-    <rsm:ExchangedDocument>
-        <ram:ID>{INVOICE_NUMBER}</ram:ID>
-        <ram:Name>Invoice</ram:Name>
-        <ram:TypeCode>380</ram:TypeCode>
-        <ram:IssueDateTime>
-            <udt:DateTimeString format="102">{INVOICE_DATE}</udt:DateTimeString>
-        </ram:IssueDateTime>
-    </rsm:ExchangedDocument>
-    <rsm:SupplyChainTradeTransaction>
-        <ram:ApplicableHeaderTradeAgreement>
-            <ram:BuyerReference>{CUSTOMER_NUMBER}</ram:BuyerReference>
-        </ram:ApplicableHeaderTradeAgreement>
-        <ram:ApplicableHeaderTradeDelivery>
-            <ram:ShipToTradeParty>
-                <ram:Name>{BUYER_NAME}</ram:Name>
-            </ram:ShipToTradeParty>
-        </ram:ApplicableHeaderTradeDelivery>
-        <ram:ApplicableHeaderTradeSettlement>
-            <ram:SpecifiedTradeSettlementHeaderMonetarySummation>
-                <ram:LineTotalAmount>{NET_AMOUNT}</ram:LineTotalAmount>
-                <ram:TaxTotalAmount>{TAX_AMOUNT}</ram:TaxTotalAmount>
-                <ram:GrandTotalAmount>{GROSS_AMOUNT}</ram:GrandTotalAmount>
-            </ram:SpecifiedTradeSettlementHeaderMonetarySummation>
-        </ram:ApplicableHeaderTradeSettlement>
-    </rsm:SupplyChainTradeTransaction>
-</rsm:CrossIndustryInvoice>
-XML;
+            <?xml version="1.0" encoding="UTF-8"?>
+            <rsm:CrossIndustryInvoice xmlns:rsm="urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100"
+                                      xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100"
+                                      xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100">
+                <rsm:ExchangedDocumentContext>
+                    <ram:TestIndicator>
+                        <udt:Indicator>false</udt:Indicator>
+                    </ram:TestIndicator>
+                </rsm:ExchangedDocumentContext>
+                <rsm:ExchangedDocument>
+                    <ram:ID>{INVOICE_NUMBER}</ram:ID>
+                    <ram:Name>Invoice</ram:Name>
+                    <ram:TypeCode>380</ram:TypeCode>
+                    <ram:IssueDateTime>
+                        <udt:DateTimeString format="102">{INVOICE_DATE}</udt:DateTimeString>
+                    </ram:IssueDateTime>
+                </rsm:ExchangedDocument>
+                <rsm:SupplyChainTradeTransaction>
+                    <ram:ApplicableHeaderTradeAgreement>
+                        <ram:BuyerReference>{CUSTOMER_NUMBER}</ram:BuyerReference>
+                    </ram:ApplicableHeaderTradeAgreement>
+                    <ram:ApplicableHeaderTradeDelivery>
+                        <ram:ShipToTradeParty>
+                            <ram:Name>{BUYER_NAME}</ram:Name>
+                        </ram:ShipToTradeParty>
+                    </ram:ApplicableHeaderTradeDelivery>
+                    <ram:ApplicableHeaderTradeSettlement>
+                        <ram:SpecifiedTradeSettlementHeaderMonetarySummation>
+                            <ram:LineTotalAmount>{NET_AMOUNT}</ram:LineTotalAmount>
+                            <ram:TaxTotalAmount>{TAX_AMOUNT}</ram:TaxTotalAmount>
+                            <ram:GrandTotalAmount>{GROSS_AMOUNT}</ram:GrandTotalAmount>
+                        </ram:SpecifiedTradeSettlementHeaderMonetarySummation>
+                    </ram:ApplicableHeaderTradeSettlement>
+                </rsm:SupplyChainTradeTransaction>
+            </rsm:CrossIndustryInvoice>
+            XML;
     }
 }

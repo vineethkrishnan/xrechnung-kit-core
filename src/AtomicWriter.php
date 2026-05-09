@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace XrechnungKit;
 
+use RuntimeException;
+
 /**
  * Atomic write with quarantine sibling.
  *
@@ -21,7 +23,7 @@ final class AtomicWriter
      *
      * @return string The final path (either $targetPath or the quarantine sibling).
      *
-     * @throws \RuntimeException If the temp file cannot be created or the rename fails (e.g., cross-filesystem rename).
+     * @throws RuntimeException If the temp file cannot be created or the rename fails (e.g., cross-filesystem rename).
      */
     public function write(string $xml, string $targetPath, bool $valid): string
     {
@@ -29,23 +31,23 @@ final class AtomicWriter
         $oppositePath = $valid ? self::quarantinePath($targetPath) : $targetPath;
 
         $directory = \dirname($finalPath);
-        if (!is_dir($directory) && !@mkdir($directory, 0755, true) && !is_dir($directory)) {
-            throw new \RuntimeException("Could not create output directory: {$directory}");
+        if (!is_dir($directory) && !@mkdir($directory, 0o755, true) && !is_dir($directory)) {
+            throw new RuntimeException("Could not create output directory: {$directory}");
         }
 
         $tempPath = $directory . DIRECTORY_SEPARATOR . '.xrechnung_kit_' . bin2hex(random_bytes(8)) . '.tmp';
 
         $handle = @fopen($tempPath, 'wb');
         if ($handle === false) {
-            throw new \RuntimeException("Could not open temp file for writing: {$tempPath}");
+            throw new RuntimeException("Could not open temp file for writing: {$tempPath}");
         }
 
         try {
             if (@flock($handle, LOCK_EX) === false) {
-                throw new \RuntimeException("Could not acquire exclusive lock on temp file: {$tempPath}");
+                throw new RuntimeException("Could not acquire exclusive lock on temp file: {$tempPath}");
             }
             if (@fwrite($handle, $xml) === false) {
-                throw new \RuntimeException("Could not write XML to temp file: {$tempPath}");
+                throw new RuntimeException("Could not write XML to temp file: {$tempPath}");
             }
             @fflush($handle);
             @flock($handle, LOCK_UN);
@@ -55,7 +57,7 @@ final class AtomicWriter
 
         if (!@rename($tempPath, $finalPath)) {
             @unlink($tempPath);
-            throw new \RuntimeException("Could not atomically rename temp file to: {$finalPath}");
+            throw new RuntimeException("Could not atomically rename temp file to: {$finalPath}");
         }
 
         if ($oppositePath !== $finalPath && file_exists($oppositePath)) {

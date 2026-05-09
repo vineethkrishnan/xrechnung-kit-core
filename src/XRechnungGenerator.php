@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace XrechnungKit;
 
+use BackedEnum;
 use XrechnungKit\Logger\LoggerInterface;
 use XrechnungKit\Logger\NullLogger;
 use XrechnungKit\Notification\ChannelDispatcher;
@@ -30,7 +33,7 @@ final class XRechnungGenerator
         ?XRechnungValidator $validator = null,
         ?LoggerInterface $logger = null,
         ?NotificationDispatcherInterface $notifications = null,
-        ?AtomicWriter $writer = null
+        ?AtomicWriter $writer = null,
     ) {
         $this->xRechnungEntity = $xRechnungEntity;
         $this->validator = $validator ?? new XRechnungValidator();
@@ -56,7 +59,7 @@ final class XRechnungGenerator
     public function generateXRechnung(string $fileName = 'XRechnung.xml'): string
     {
         $invoiceType = $this->xRechnungEntity->getInvoiceType();
-        $this->xmlContent = XRechnungTemplate::getTemplate(is_string($invoiceType) ? $invoiceType : null);
+        $this->xmlContent = XRechnungTemplate::getTemplate(\is_string($invoiceType) ? $invoiceType : null);
 
         $this->generateSummary()
             ->addCautionDepositReference()
@@ -102,7 +105,7 @@ final class XRechnungGenerator
      *
      * @return self The instance with the populated XML content.
      */
-    private function generateSummary(): XRechnungGenerator
+    private function generateSummary(): self
     {
         $entity = $this->xRechnungEntity;
         $amountPrefix = $entity->getInvoiceType() == 'cancel' ? '-' : '';
@@ -143,7 +146,7 @@ final class XRechnungGenerator
      *
      * @return XRechnungGenerator The current instance of XRechnungGenerator with updated XML content.
      */
-    private function addCautionDepositReference(): XRechnungGenerator
+    private function addCautionDepositReference(): self
     {
         $cautionReferenceTemplate = '';
         if ($this->xRechnungEntity->getCautionDocuments()) {
@@ -151,7 +154,7 @@ final class XRechnungGenerator
                 $cautionReferenceTemplate .= self::fill(
                     XRechnungTemplate::getCautionDepositEntityTemplate(),
                     '{REFERENCE_NUMBER}',
-                    self::asString($item['invoice_number_prefix'] ?? '') . self::asString($item['invoice_number'] ?? '')
+                    self::asString($item['invoice_number_prefix'] ?? '') . self::asString($item['invoice_number'] ?? ''),
                 );
             }
         }
@@ -162,7 +165,7 @@ final class XRechnungGenerator
                 $depositReferenceTemplate .= self::fill(
                     XRechnungTemplate::getCautionDepositEntityTemplate(),
                     '{REFERENCE_NUMBER}',
-                    self::asString($item['invoice_number_prefix'] ?? '') . self::asString($item['invoice_number'] ?? '')
+                    self::asString($item['invoice_number_prefix'] ?? '') . self::asString($item['invoice_number'] ?? ''),
                 );
             }
         }
@@ -170,7 +173,7 @@ final class XRechnungGenerator
         $this->xmlContent = self::fill(
             $this->xmlContent,
             '{CAUTION_DEPOSIT_REFERENCE}',
-            $cautionReferenceTemplate . $depositReferenceTemplate
+            $cautionReferenceTemplate . $depositReferenceTemplate,
         );
 
         return $this;
@@ -181,7 +184,7 @@ final class XRechnungGenerator
      *
      * @return XRechnungGenerator The current instance of XRechnungGenerator for method chaining.
      */
-    private function addSupplierParty(): XRechnungGenerator
+    private function addSupplierParty(): self
     {
         $entity = $this->xRechnungEntity;
         $supplierParty = XRechnungTemplate::getSupplierPartyTemplate();
@@ -207,7 +210,7 @@ final class XRechnungGenerator
      *
      * @return XRechnungGenerator Returns the instance of XRechnungGenerator.
      */
-    public function addBuyerParty(): XRechnungGenerator
+    public function addBuyerParty(): self
     {
         $entity = $this->xRechnungEntity;
         $buyerParty = XRechnungTemplate::getBuyerPartyTemplate();
@@ -234,7 +237,7 @@ final class XRechnungGenerator
      *
      * @return XRechnungGenerator Returns the instance of XRechnungGenerator.
      */
-    public function addInvoiceLineItem(): XRechnungGenerator
+    public function addInvoiceLineItem(): self
     {
         $invoiceLineItems = '';
 
@@ -296,7 +299,7 @@ final class XRechnungGenerator
         $this->xmlContent = preg_replace(
             '/<(\w+:)?\w+[^>]*>\s*<\/\1?\w+>/',
             '',
-            $this->xmlContent
+            $this->xmlContent,
         ) ?? $this->xmlContent;
     }
 
@@ -316,13 +319,13 @@ final class XRechnungGenerator
         if ($value === null) {
             return '';
         }
-        if ($value instanceof \BackedEnum) {
+        if ($value instanceof BackedEnum) {
             return (string) $value->value;
         }
-        if (is_scalar($value)) {
+        if (\is_scalar($value)) {
             return (string) $value;
         }
-        if (is_object($value) && method_exists($value, '__toString')) {
+        if (\is_object($value) && method_exists($value, '__toString')) {
             return (string) $value;
         }
         return '';
@@ -330,7 +333,7 @@ final class XRechnungGenerator
 
     private static function asFloat(mixed $value): float
     {
-        if ($value instanceof \BackedEnum && is_numeric($value->value)) {
+        if ($value instanceof BackedEnum && is_numeric($value->value)) {
             return (float) $value->value;
         }
         return is_numeric($value) ? (float) $value : 0.0;

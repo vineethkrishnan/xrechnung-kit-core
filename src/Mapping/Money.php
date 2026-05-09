@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace XrechnungKit\Mapping;
 
+use Override;
+use Stringable;
 use XrechnungKit\Exception\MappingDataException;
 
 /**
@@ -19,7 +21,7 @@ use XrechnungKit\Exception\MappingDataException;
  * pinning a decimal library (brick/math or ext-bcmath) which we have decided
  * not to take as a hard dependency yet.
  */
-final class Money implements \Stringable
+final class Money implements Stringable
 {
     public function __construct(
         public readonly string $amount,
@@ -48,12 +50,12 @@ final class Money implements \Stringable
         return str_starts_with($this->amount, '-');
     }
 
-    public function equals(Money $other): bool
+    public function equals(self $other): bool
     {
         return $this->amount === $other->amount && $this->currency === $other->currency;
     }
 
-    #[\Override]
+    #[Override]
     public function __toString(): string
     {
         return $this->amount;

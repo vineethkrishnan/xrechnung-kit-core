@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace XrechnungKit\Notification\Channel;
 
+use Closure;
+use Override;
+use Throwable;
 use XrechnungKit\Notification\Notification;
 use XrechnungKit\Notification\NotificationChannelInterface;
 
@@ -14,30 +17,30 @@ use XrechnungKit\Notification\NotificationChannelInterface;
  */
 final class CallableChannel implements NotificationChannelInterface
 {
-    /** @var \Closure(Notification): void */
-    private \Closure $sender;
+    /** @var Closure(Notification): void */
+    private Closure $sender;
 
     /**
      * @param callable(Notification): void $sender
      */
     public function __construct(
         callable $sender,
-        private readonly string $name = 'callable'
+        private readonly string $name = 'callable',
     ) {
-        $this->sender = \Closure::fromCallable($sender);
+        $this->sender = Closure::fromCallable($sender);
     }
 
-    #[\Override]
+    #[Override]
     public function send(Notification $notification): void
     {
         try {
             ($this->sender)($notification);
-        } catch (\Throwable) {
+        } catch (Throwable) {
             // best-effort delivery
         }
     }
 
-    #[\Override]
+    #[Override]
     public function name(): string
     {
         return $this->name;

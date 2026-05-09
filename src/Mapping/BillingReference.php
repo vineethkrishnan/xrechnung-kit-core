@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace XrechnungKit\Mapping;
 
+use DateTimeImmutable;
 use XrechnungKit\Exception\MappingDataException;
 
 /**
@@ -15,7 +16,7 @@ final class BillingReference
 {
     public function __construct(
         public readonly string $invoiceNumber,
-        public readonly \DateTimeImmutable $issueDate,
+        public readonly DateTimeImmutable $issueDate,
     ) {
         if (trim($invoiceNumber) === '') {
             throw MappingDataException::emptyField('BillingReference invoiceNumber');

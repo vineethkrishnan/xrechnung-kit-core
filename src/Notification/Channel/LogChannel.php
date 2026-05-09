@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace XrechnungKit\Notification\Channel;
 
+use Override;
 use XrechnungKit\Logger\LoggerInterface;
 use XrechnungKit\Notification\Notification;
 use XrechnungKit\Notification\NotificationChannelInterface;
@@ -17,11 +18,11 @@ final class LogChannel implements NotificationChannelInterface
 {
     public function __construct(
         private readonly LoggerInterface $logger,
-        private readonly string $name = 'log'
+        private readonly string $name = 'log',
     ) {
     }
 
-    #[\Override]
+    #[Override]
     public function send(Notification $notification): void
     {
         $message = '[' . $notification->title . '] ' . $notification->body;
@@ -34,7 +35,7 @@ final class LogChannel implements NotificationChannelInterface
         };
     }
 
-    #[\Override]
+    #[Override]
     public function name(): string
     {
         return $this->name;

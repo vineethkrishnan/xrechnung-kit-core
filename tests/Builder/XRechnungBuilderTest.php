@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace XrechnungKit\Tests\Builder;
 
+use DateTimeImmutable;
+use Override;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use XrechnungKit\Builder\XRechnungBuilder;
@@ -37,7 +39,7 @@ final class XRechnungBuilderTest extends TestCase
     /** @var list<string> */
     private array $cleanupPaths = [];
 
-    #[\Override]
+    #[Override]
     protected function tearDown(): void
     {
         foreach ($this->cleanupPaths as $path) {
@@ -81,7 +83,7 @@ final class XRechnungBuilderTest extends TestCase
             meta: new DocumentMeta(
                 invoiceNumber: 'STORNO-001',
                 type: XRechnungInvoiceTypeCode::DEBIT_NOTE,
-                issueDate: new \DateTimeImmutable('2026-05-09'),
+                issueDate: new DateTimeImmutable('2026-05-09'),
                 currency: 'EUR',
             ),
             seller: $this->seller(),
@@ -90,7 +92,7 @@ final class XRechnungBuilderTest extends TestCase
             taxes: [$this->tax()],
             payment: [PaymentMeans::sepaCreditTransfer('DE12500105170648489890')],
             totals: $this->totals(),
-            prior: new BillingReference('RE-2026-0001', new \DateTimeImmutable('2026-04-01')),
+            prior: new BillingReference('RE-2026-0001', new DateTimeImmutable('2026-04-01')),
         );
 
         $entity = XRechnungBuilder::buildEntity($mapping);
@@ -107,7 +109,7 @@ final class XRechnungBuilderTest extends TestCase
             meta: new DocumentMeta(
                 invoiceNumber: 'ANZ-2026-001',
                 type: XRechnungInvoiceTypeCode::CREDIT_NOTE,
-                issueDate: new \DateTimeImmutable('2026-05-09'),
+                issueDate: new DateTimeImmutable('2026-05-09'),
                 currency: 'EUR',
             ),
             seller: $this->seller(),
@@ -117,8 +119,8 @@ final class XRechnungBuilderTest extends TestCase
             payment: [PaymentMeans::sepaCreditTransfer('DE12500105170648489890')],
             totals: $this->totals(),
             period: new DocumentPeriod(
-                new \DateTimeImmutable('2026-05-01'),
-                new \DateTimeImmutable('2026-05-31'),
+                new DateTimeImmutable('2026-05-01'),
+                new DateTimeImmutable('2026-05-31'),
             ),
         );
 
@@ -136,7 +138,7 @@ final class XRechnungBuilderTest extends TestCase
             meta: new DocumentMeta(
                 invoiceNumber: 'STORNO-DEP-001',
                 type: XRechnungInvoiceTypeCode::DEBIT_NOTE,
-                issueDate: new \DateTimeImmutable('2026-05-09'),
+                issueDate: new DateTimeImmutable('2026-05-09'),
                 currency: 'EUR',
             ),
             seller: $this->seller(),
@@ -145,10 +147,10 @@ final class XRechnungBuilderTest extends TestCase
             taxes: [$this->tax()],
             payment: [PaymentMeans::sepaCreditTransfer('DE12500105170648489890')],
             totals: $this->totals(),
-            prior: new BillingReference('ANZ-2026-001', new \DateTimeImmutable('2026-04-01')),
+            prior: new BillingReference('ANZ-2026-001', new DateTimeImmutable('2026-04-01')),
             period: new DocumentPeriod(
-                new \DateTimeImmutable('2026-04-01'),
-                new \DateTimeImmutable('2026-04-30'),
+                new DateTimeImmutable('2026-04-01'),
+                new DateTimeImmutable('2026-04-30'),
             ),
         );
 
@@ -166,9 +168,9 @@ final class XRechnungBuilderTest extends TestCase
             meta: new DocumentMeta(
                 invoiceNumber: 'CAUTION-001',
                 type: XRechnungInvoiceTypeCode::COMMERCIAL_INVOICE,
-                issueDate: new \DateTimeImmutable('2026-05-09'),
+                issueDate: new DateTimeImmutable('2026-05-09'),
                 currency: 'EUR',
-                dueDate: new \DateTimeImmutable('2026-06-01'),
+                dueDate: new DateTimeImmutable('2026-06-01'),
             ),
             seller: $this->seller(),
             buyer: $this->publicBuyer(),
@@ -177,8 +179,8 @@ final class XRechnungBuilderTest extends TestCase
             payment: [PaymentMeans::sepaCreditTransfer('DE12500105170648489890')],
             totals: $this->totals(),
             period: new DocumentPeriod(
-                new \DateTimeImmutable('2026-05-01'),
-                new \DateTimeImmutable('2026-05-31'),
+                new DateTimeImmutable('2026-05-01'),
+                new DateTimeImmutable('2026-05-31'),
             ),
         );
 
@@ -214,7 +216,7 @@ final class XRechnungBuilderTest extends TestCase
             meta: new DocumentMeta(
                 invoiceNumber: 'RE-2026-0001',
                 type: XRechnungInvoiceTypeCode::COMMERCIAL_INVOICE,
-                issueDate: new \DateTimeImmutable('2026-05-09'),
+                issueDate: new DateTimeImmutable('2026-05-09'),
                 currency: 'EUR',
                 buyerReference: '04011000-12345-67',
                 note: 'Builder smoke test',

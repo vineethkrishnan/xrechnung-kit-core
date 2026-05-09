@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace XrechnungKit\Notification\Channel;
 
+use Closure;
+use Override;
+use Throwable;
 use XrechnungKit\Notification\Notification;
 use XrechnungKit\Notification\NotificationChannelInterface;
 
@@ -15,8 +18,8 @@ use XrechnungKit\Notification\NotificationChannelInterface;
  */
 final class EmailChannel implements NotificationChannelInterface
 {
-    /** @var \Closure(string $to, string $subject, string $body, array<int, string> $headers): void */
-    private \Closure $mailer;
+    /** @var Closure(string $to, string $subject, string $body, array<int, string> $headers): void */
+    private Closure $mailer;
 
     /**
      * @param string $to Recipient address.
@@ -30,14 +33,14 @@ final class EmailChannel implements NotificationChannelInterface
         private readonly string $from,
         private readonly string $name = 'email',
         private readonly string $subjectPrefix = '',
-        ?callable $mailer = null
+        ?callable $mailer = null,
     ) {
         $this->mailer = $mailer !== null
-            ? \Closure::fromCallable($mailer)
+            ? Closure::fromCallable($mailer)
             : self::defaultMailer();
     }
 
-    #[\Override]
+    #[Override]
     public function send(Notification $notification): void
     {
         try {
@@ -48,21 +51,21 @@ final class EmailChannel implements NotificationChannelInterface
                 'X-XrechnungKit-Severity: ' . $notification->severity->value,
             ];
             ($this->mailer)($this->to, $subject, $notification->body, $headers);
-        } catch (\Throwable) {
+        } catch (Throwable) {
             // best-effort delivery
         }
     }
 
-    #[\Override]
+    #[Override]
     public function name(): string
     {
         return $this->name;
     }
 
-    private static function defaultMailer(): \Closure
+    private static function defaultMailer(): Closure
     {
         return static function (string $to, string $subject, string $body, array $headers): void {
-            \mail($to, $subject, $body, implode("\r\n", array_map(static fn (mixed $v): string => is_scalar($v) ? (string) $v : '', $headers)));
+            mail($to, $subject, $body, implode("\r\n", array_map(static fn (mixed $v): string => \is_scalar($v) ? (string) $v : '', $headers)));
         };
     }
 }

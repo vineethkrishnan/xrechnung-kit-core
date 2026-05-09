@@ -17,7 +17,7 @@ final class Notification
         public readonly string $title,
         public readonly string $body,
         public readonly Severity $severity = Severity::Warning,
-        public readonly array $context = []
+        public readonly array $context = [],
     ) {
     }
 

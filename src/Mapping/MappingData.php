@@ -35,11 +35,11 @@ use XrechnungKit\XRechnungInvoiceTypeCode;
 final class MappingData
 {
     /**
-     * @param list<LineItem>      $lines
-     * @param list<TaxBreakdown>  $taxes
-     * @param list<PaymentMeans>  $payment
-     * @param list<Attachment>    $attachments
-     * @param list<Note>          $notes
+     * @param list<LineItem> $lines
+     * @param list<TaxBreakdown> $taxes
+     * @param list<PaymentMeans> $payment
+     * @param list<Attachment> $attachments
+     * @param list<Note> $notes
      */
     public function __construct(
         public readonly DocumentMeta $meta,
@@ -62,36 +62,36 @@ final class MappingData
         }
 
         $currency = $meta->currency;
-        $this->assertCurrency('totals.lineNet',       $totals->lineNet->currency,       $currency);
+        $this->assertCurrency('totals.lineNet', $totals->lineNet->currency, $currency);
         $this->assertCurrency('totals.taxableAmount', $totals->taxableAmount->currency, $currency);
-        $this->assertCurrency('totals.taxAmount',     $totals->taxAmount->currency,     $currency);
-        $this->assertCurrency('totals.payable',       $totals->payable->currency,       $currency);
+        $this->assertCurrency('totals.taxAmount', $totals->taxAmount->currency, $currency);
+        $this->assertCurrency('totals.payable', $totals->payable->currency, $currency);
 
         foreach ($lines as $i => $line) {
             if (!$line instanceof LineItem) {
-                throw new MappingDataException(sprintf('lines[%d] must be a LineItem', $i));
+                throw new MappingDataException(\sprintf('lines[%d] must be a LineItem', $i));
             }
-            $this->assertCurrency(sprintf('lines[%d].lineTotal', $i), $line->lineTotal->currency, $currency);
+            $this->assertCurrency(\sprintf('lines[%d].lineTotal', $i), $line->lineTotal->currency, $currency);
         }
         foreach ($taxes as $i => $tax) {
             if (!$tax instanceof TaxBreakdown) {
-                throw new MappingDataException(sprintf('taxes[%d] must be a TaxBreakdown', $i));
+                throw new MappingDataException(\sprintf('taxes[%d] must be a TaxBreakdown', $i));
             }
-            $this->assertCurrency(sprintf('taxes[%d].taxableAmount', $i), $tax->taxableAmount->currency, $currency);
+            $this->assertCurrency(\sprintf('taxes[%d].taxableAmount', $i), $tax->taxableAmount->currency, $currency);
         }
         foreach ($payment as $i => $pm) {
             if (!$pm instanceof PaymentMeans) {
-                throw new MappingDataException(sprintf('payment[%d] must be a PaymentMeans', $i));
+                throw new MappingDataException(\sprintf('payment[%d] must be a PaymentMeans', $i));
             }
         }
         foreach ($attachments as $i => $a) {
             if (!$a instanceof Attachment) {
-                throw new MappingDataException(sprintf('attachments[%d] must be an Attachment', $i));
+                throw new MappingDataException(\sprintf('attachments[%d] must be an Attachment', $i));
             }
         }
         foreach ($notes as $i => $n) {
             if (!$n instanceof Note) {
-                throw new MappingDataException(sprintf('notes[%d] must be a Note', $i));
+                throw new MappingDataException(\sprintf('notes[%d] must be a Note', $i));
             }
         }
     }
@@ -99,11 +99,11 @@ final class MappingData
     /**
      * Standard commercial invoice (UNTDID 380). The vanilla case.
      *
-     * @param list<LineItem>      $lines
-     * @param list<TaxBreakdown>  $taxes
-     * @param list<PaymentMeans>  $payment
-     * @param list<Attachment>    $attachments
-     * @param list<Note>          $notes
+     * @param list<LineItem> $lines
+     * @param list<TaxBreakdown> $taxes
+     * @param list<PaymentMeans> $payment
+     * @param list<Attachment> $attachments
+     * @param list<Note> $notes
      */
     public static function standardInvoice(
         DocumentMeta $meta,
@@ -125,11 +125,11 @@ final class MappingData
      * Partial invoice / Anzahlung (UNTDID 326). Document period (BG-14) is
      * required by BR-DE-TMP-32.
      *
-     * @param list<LineItem>      $lines
-     * @param list<TaxBreakdown>  $taxes
-     * @param list<PaymentMeans>  $payment
-     * @param list<Attachment>    $attachments
-     * @param list<Note>          $notes
+     * @param list<LineItem> $lines
+     * @param list<TaxBreakdown> $taxes
+     * @param list<PaymentMeans> $payment
+     * @param list<Attachment> $attachments
+     * @param list<Note> $notes
      */
     public static function partialInvoice(
         DocumentMeta $meta,
@@ -151,11 +151,11 @@ final class MappingData
      * Caution / security deposit invoice (UNTDID 380 caution variant).
      * Both period and dueDate are required.
      *
-     * @param list<LineItem>      $lines
-     * @param list<TaxBreakdown>  $taxes
-     * @param list<PaymentMeans>  $payment
-     * @param list<Attachment>    $attachments
-     * @param list<Note>          $notes
+     * @param list<LineItem> $lines
+     * @param list<TaxBreakdown> $taxes
+     * @param list<PaymentMeans> $payment
+     * @param list<Attachment> $attachments
+     * @param list<Note> $notes
      */
     public static function cautionInvoice(
         DocumentMeta $meta,
@@ -180,11 +180,11 @@ final class MappingData
      * Credit note / cancellation (UNTDID 381). Prior invoice reference
      * (BG-3 / BT-25) is required by BR-DE-22.
      *
-     * @param list<LineItem>      $lines
-     * @param list<TaxBreakdown>  $taxes
-     * @param list<PaymentMeans>  $payment
-     * @param list<Attachment>    $attachments
-     * @param list<Note>          $notes
+     * @param list<LineItem> $lines
+     * @param list<TaxBreakdown> $taxes
+     * @param list<PaymentMeans> $payment
+     * @param list<Attachment> $attachments
+     * @param list<Note> $notes
      */
     public static function creditNote(
         DocumentMeta $meta,
@@ -207,11 +207,11 @@ final class MappingData
      * Deposit cancellation (UNTDID 381). Both prior invoice reference and
      * document period are required.
      *
-     * @param list<LineItem>      $lines
-     * @param list<TaxBreakdown>  $taxes
-     * @param list<PaymentMeans>  $payment
-     * @param list<Attachment>    $attachments
-     * @param list<Note>          $notes
+     * @param list<LineItem> $lines
+     * @param list<TaxBreakdown> $taxes
+     * @param list<PaymentMeans> $payment
+     * @param list<Attachment> $attachments
+     * @param list<Note> $notes
      */
     public static function depositCancellation(
         DocumentMeta $meta,
@@ -233,7 +233,7 @@ final class MappingData
     private static function assertType(DocumentMeta $meta, XRechnungInvoiceTypeCode $expected, string $constructor): void
     {
         if ($meta->type !== $expected) {
-            throw new MappingDataException(sprintf(
+            throw new MappingDataException(\sprintf(
                 'MappingData::%s requires meta.type = %s (%d), got %s (%d)',
                 $constructor,
                 $expected->name,
@@ -247,7 +247,7 @@ final class MappingData
     private function assertCurrency(string $field, string $given, string $expected): void
     {
         if ($given !== $expected) {
-            throw new MappingDataException(sprintf(
+            throw new MappingDataException(\sprintf(
                 'Currency mismatch on %s: %s vs document currency %s',
                 $field,
                 $given,

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace XrechnungKit\Tests\Pipeline;
 
+use Override;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use XrechnungKit\AtomicWriter;
@@ -26,14 +27,14 @@ final class QuarantineBehaviorTest extends TestCase
     private string $outputPath;
     private string $invalidPath;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         $this->outputPath = sys_get_temp_dir() . '/xrechnung-kit-quarantine-' . uniqid('', true) . '.xml';
         $this->invalidPath = AtomicWriter::quarantinePath($this->outputPath);
     }
 
-    #[\Override]
+    #[Override]
     protected function tearDown(): void
     {
         foreach ([$this->outputPath, $this->invalidPath] as $f) {
@@ -111,19 +112,19 @@ final class QuarantineBehaviorTest extends TestCase
                 parent::__construct();
             }
 
-            #[\Override]
+            #[Override]
             public function validateContent(string $xml): bool
             {
                 return $this->verdict;
             }
 
-            #[\Override]
+            #[Override]
             public function validate(string $xmlFile): bool
             {
                 return $this->verdict;
             }
 
-            #[\Override]
+            #[Override]
             public function getErrors(): array
             {
                 return $this->verdict ? [] : ['stub: forced invalid for test'];

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace XrechnungKit\Notification\Channel;
 
+use Closure;
+use Override;
+use Throwable;
 use XrechnungKit\Notification\Notification;
 use XrechnungKit\Notification\NotificationChannelInterface;
 
@@ -20,11 +23,11 @@ use XrechnungKit\Notification\NotificationChannelInterface;
  */
 final class WebhookChannel implements NotificationChannelInterface
 {
-    /** @var \Closure(string, array<int, string>, string): void */
-    private \Closure $httpClient;
+    /** @var Closure(string, array<int, string>, string): void */
+    private Closure $httpClient;
 
-    /** @var \Closure(Notification): array<string, mixed> */
-    private \Closure $payloadFactory;
+    /** @var Closure(Notification): array<string, mixed> */
+    private Closure $payloadFactory;
 
     /**
      * @param string $url The webhook URL.
@@ -38,10 +41,10 @@ final class WebhookChannel implements NotificationChannelInterface
         private readonly string $name = 'webhook',
         private readonly array $extraHeaders = [],
         ?callable $payloadFactory = null,
-        ?callable $httpClient = null
+        ?callable $httpClient = null,
     ) {
         $this->payloadFactory = $payloadFactory !== null
-            ? \Closure::fromCallable($payloadFactory)
+            ? Closure::fromCallable($payloadFactory)
             : static fn (Notification $n): array => [
                 'title' => $n->title,
                 'body' => $n->body,
@@ -49,11 +52,11 @@ final class WebhookChannel implements NotificationChannelInterface
                 'context' => $n->context,
             ];
         $this->httpClient = $httpClient !== null
-            ? \Closure::fromCallable($httpClient)
+            ? Closure::fromCallable($httpClient)
             : self::defaultHttpClient();
     }
 
-    #[\Override]
+    #[Override]
     public function send(Notification $notification): void
     {
         try {
@@ -63,31 +66,31 @@ final class WebhookChannel implements NotificationChannelInterface
                 array_merge(['Content-Type: application/json'], $this->extraHeaders),
                 json_encode($payload, JSON_THROW_ON_ERROR)
             );
-        } catch (\Throwable) {
+        } catch (Throwable) {
             // best-effort delivery
         }
     }
 
-    #[\Override]
+    #[Override]
     public function name(): string
     {
         return $this->name;
     }
 
-    private static function defaultHttpClient(): \Closure
+    private static function defaultHttpClient(): Closure
     {
         return static function (string $url, array $headers, string $body): void {
-            $context = \stream_context_create([
+            $context = stream_context_create([
                 'http' => [
                     'method' => 'POST',
-                    'header' => implode("\r\n", array_map(static fn (mixed $v): string => is_scalar($v) ? (string) $v : '', $headers)),
+                    'header' => implode("\r\n", array_map(static fn (mixed $v): string => \is_scalar($v) ? (string) $v : '', $headers)),
                     'content' => $body,
                     'timeout' => 5,
                     'ignore_errors' => true,
                     'protocol_version' => 1.1,
                 ],
             ]);
-            @\file_get_contents($url, false, $context);
+            @file_get_contents($url, false, $context);
         };
     }
 }

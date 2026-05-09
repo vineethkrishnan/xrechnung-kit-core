@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace XrechnungKit\Tests\Mapping;
 
+use Override;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use XrechnungKit\XRechnungEntity;
@@ -23,14 +24,14 @@ final class EnumByteEquivalenceTest extends TestCase
     private string $rawPath;
     private string $enumPath;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         $this->rawPath = sys_get_temp_dir() . '/xrechnung-kit-enum-raw-' . uniqid('', true) . '.xml';
         $this->enumPath = sys_get_temp_dir() . '/xrechnung-kit-enum-cs-' . uniqid('', true) . '.xml';
     }
 
-    #[\Override]
+    #[Override]
     protected function tearDown(): void
     {
         foreach ([$this->rawPath, $this->enumPath] as $f) {

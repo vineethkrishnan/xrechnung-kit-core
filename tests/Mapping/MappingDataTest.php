@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace XrechnungKit\Tests\Mapping;
 
+use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use XrechnungKit\Exception\MappingDataException;
@@ -53,8 +54,8 @@ final class MappingDataTest extends TestCase
             payment: [PaymentMeans::sepaCreditTransfer('DE12500105170648489890')],
             totals: $this->totals(),
             period: new DocumentPeriod(
-                new \DateTimeImmutable('2026-05-01'),
-                new \DateTimeImmutable('2026-05-31'),
+                new DateTimeImmutable('2026-05-01'),
+                new DateTimeImmutable('2026-05-31'),
             ),
         );
 
@@ -67,7 +68,7 @@ final class MappingDataTest extends TestCase
         $mapping = MappingData::cautionInvoice(
             meta: $this->meta(
                 XRechnungInvoiceTypeCode::COMMERCIAL_INVOICE,
-                dueDate: new \DateTimeImmutable('2026-06-01'),
+                dueDate: new DateTimeImmutable('2026-06-01'),
             ),
             seller: $this->seller(),
             buyer: $this->businessBuyer(),
@@ -76,8 +77,8 @@ final class MappingDataTest extends TestCase
             payment: [PaymentMeans::sepaCreditTransfer('DE12500105170648489890')],
             totals: $this->totals(),
             period: new DocumentPeriod(
-                new \DateTimeImmutable('2026-05-01'),
-                new \DateTimeImmutable('2026-05-31'),
+                new DateTimeImmutable('2026-05-01'),
+                new DateTimeImmutable('2026-05-31'),
             ),
         );
 
@@ -99,8 +100,8 @@ final class MappingDataTest extends TestCase
             payment: [PaymentMeans::sepaCreditTransfer('DE12500105170648489890')],
             totals: $this->totals(),
             period: new DocumentPeriod(
-                new \DateTimeImmutable('2026-05-01'),
-                new \DateTimeImmutable('2026-05-31'),
+                new DateTimeImmutable('2026-05-01'),
+                new DateTimeImmutable('2026-05-31'),
             ),
         );
     }
@@ -116,7 +117,7 @@ final class MappingDataTest extends TestCase
             taxes: [$this->tax()],
             payment: [PaymentMeans::sepaCreditTransfer('DE12500105170648489890')],
             totals: $this->totals(),
-            prior: new BillingReference('RE-2026-0001', new \DateTimeImmutable('2026-04-01')),
+            prior: new BillingReference('RE-2026-0001', new DateTimeImmutable('2026-04-01')),
         );
 
         self::assertNotNull($mapping->prior);
@@ -134,10 +135,10 @@ final class MappingDataTest extends TestCase
             taxes: [$this->tax()],
             payment: [PaymentMeans::sepaCreditTransfer('DE12500105170648489890')],
             totals: $this->totals(),
-            prior: new BillingReference('RE-2026-0001', new \DateTimeImmutable('2026-04-01')),
+            prior: new BillingReference('RE-2026-0001', new DateTimeImmutable('2026-04-01')),
             period: new DocumentPeriod(
-                new \DateTimeImmutable('2026-04-01'),
-                new \DateTimeImmutable('2026-04-30'),
+                new DateTimeImmutable('2026-04-01'),
+                new DateTimeImmutable('2026-04-30'),
             ),
         );
 
@@ -207,12 +208,12 @@ final class MappingDataTest extends TestCase
         );
     }
 
-    private function meta(XRechnungInvoiceTypeCode $type, ?\DateTimeImmutable $dueDate = null): DocumentMeta
+    private function meta(XRechnungInvoiceTypeCode $type, ?DateTimeImmutable $dueDate = null): DocumentMeta
     {
         return new DocumentMeta(
             invoiceNumber: 'RE-MAPPING-001',
             type: $type,
-            issueDate: new \DateTimeImmutable('2026-05-09'),
+            issueDate: new DateTimeImmutable('2026-05-09'),
             currency: 'EUR',
             dueDate: $dueDate,
             buyerReference: '04011000-12345-67',
