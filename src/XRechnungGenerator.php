@@ -316,6 +316,9 @@ final class XRechnungGenerator
         if ($value === null) {
             return '';
         }
+        if ($value instanceof \BackedEnum) {
+            return (string) $value->value;
+        }
         if (is_scalar($value)) {
             return (string) $value;
         }
@@ -327,6 +330,9 @@ final class XRechnungGenerator
 
     private static function asFloat(mixed $value): float
     {
+        if ($value instanceof \BackedEnum && is_numeric($value->value)) {
+            return (float) $value->value;
+        }
         return is_numeric($value) ? (float) $value : 0.0;
     }
 }
