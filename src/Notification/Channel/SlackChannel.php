@@ -50,10 +50,7 @@ final class SlackChannel implements NotificationChannelInterface
         if ($this->username !== null) {
             $payload['username'] = $this->username;
         }
-        $emoji = $this->iconEmoji ?? self::defaultEmojiFor($notification->severity);
-        if ($emoji !== null) {
-            $payload['icon_emoji'] = $emoji;
-        }
+        $payload['icon_emoji'] = $this->iconEmoji ?? self::defaultEmojiFor($notification->severity);
 
         try {
             ($this->httpClient)(
@@ -71,7 +68,7 @@ final class SlackChannel implements NotificationChannelInterface
         return $this->name;
     }
 
-    private static function defaultEmojiFor(Severity $severity): ?string
+    private static function defaultEmojiFor(Severity $severity): string
     {
         return match ($severity) {
             Severity::Info => ':information_source:',
@@ -87,7 +84,7 @@ final class SlackChannel implements NotificationChannelInterface
             $context = \stream_context_create([
                 'http' => [
                     'method' => 'POST',
-                    'header' => implode("\r\n", $headers),
+                    'header' => implode("\r\n", array_map(static fn (mixed $v): string => is_scalar($v) ? (string) $v : '', $headers)),
                     'content' => $body,
                     'timeout' => 5,
                     'ignore_errors' => true,

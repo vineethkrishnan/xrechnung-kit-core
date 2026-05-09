@@ -31,49 +31,81 @@ class XRechnungTemplate
         }
         $templatePath = self::templatesDir() . '/XRechnung' . ucfirst($type) . 'Template.xml';
 
-        return file_exists($templatePath) ? file_get_contents($templatePath) : static::defaultContent();
+        if (!file_exists($templatePath)) {
+            return static::defaultContent();
+        }
+        $contents = file_get_contents($templatePath);
+        return $contents !== false ? $contents : static::defaultContent();
     }
 
     public static function getCautionDepositEntityTemplate(): string
     {
         $templatePath = self::templatesDir() . '/partials/CautionDepositEntityTemplate.xml';
-        return file_exists($templatePath) ? file_get_contents($templatePath) : '';
+        if (!file_exists($templatePath)) {
+            return '';
+        }
+        $contents = file_get_contents($templatePath);
+        return $contents !== false ? $contents : '';
     }
 
     public static function getSupplierPartyTemplate(): string
     {
         $templatePath = self::templatesDir() . '/partials/SupplierPartyTemplate.xml';
-        return file_exists($templatePath) ? file_get_contents($templatePath) : '';
+        if (!file_exists($templatePath)) {
+            return '';
+        }
+        $contents = file_get_contents($templatePath);
+        return $contents !== false ? $contents : '';
     }
 
     public static function getBuyerPartyTemplate(): string
     {
         $templatePath = self::templatesDir() . '/partials/BuyerPartyTemplate.xml';
-        return file_exists($templatePath) ? file_get_contents($templatePath) : '';
+        if (!file_exists($templatePath)) {
+            return '';
+        }
+        $contents = file_get_contents($templatePath);
+        return $contents !== false ? $contents : '';
     }
 
     public static function getInvoiceLineTemplate(): string
     {
         $templatePath = self::templatesDir() . '/partials/InvoiceLineTemplate.xml';
-        return file_exists($templatePath) ? file_get_contents($templatePath) : '';
+        if (!file_exists($templatePath)) {
+            return '';
+        }
+        $contents = file_get_contents($templatePath);
+        return $contents !== false ? $contents : '';
     }
 
     public static function getCautionDepositLineTemplate(): string
     {
         $templatePath = self::templatesDir() . '/partials/CautionDepositLineItemTemplate.xml';
-        return file_exists($templatePath) ? file_get_contents($templatePath) : '';
+        if (!file_exists($templatePath)) {
+            return '';
+        }
+        $contents = file_get_contents($templatePath);
+        return $contents !== false ? $contents : '';
     }
 
     public static function getCreditLineTemplate(): string
     {
         $templatePath = self::templatesDir() . '/partials/CancelCreditLineItemTemplate.xml';
-        return file_exists($templatePath) ? file_get_contents($templatePath) : '';
+        if (!file_exists($templatePath)) {
+            return '';
+        }
+        $contents = file_get_contents($templatePath);
+        return $contents !== false ? $contents : '';
     }
 
     public static function getAllowanceChargeTemplate(): string
     {
         $templatePath = self::templatesDir() . '/partials/InvoiceLineAllowanceChargeTemplate.xml';
-        return file_exists($templatePath) ? file_get_contents($templatePath) : '';
+        if (!file_exists($templatePath)) {
+            return '';
+        }
+        $contents = file_get_contents($templatePath);
+        return $contents !== false ? $contents : '';
     }
 
     /**

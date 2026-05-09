@@ -15,13 +15,13 @@ use XrechnungKit\Notification\Severity;
  */
 class XRechnungGenerator
 {
-    private $xRechnungEntity;
-    private $validator;
+    private XRechnungEntity $xRechnungEntity;
+    private XRechnungValidator $validator;
     private AtomicWriter $writer;
     private LoggerInterface $logger;
     private NotificationDispatcherInterface $notifications;
 
-    private $xmlContent;
+    private string $xmlContent = '';
 
     public const DOCUMENT_TYPES_TO_SKIP_GENERATION = ['offer', 'order'];
 
@@ -55,7 +55,8 @@ class XRechnungGenerator
      */
     public function generateXRechnung(string $fileName = 'XRechnung.xml'): string
     {
-        $this->xmlContent = XRechnungTemplate::getTemplate($this->xRechnungEntity->getInvoiceType());
+        $invoiceType = $this->xRechnungEntity->getInvoiceType();
+        $this->xmlContent = XRechnungTemplate::getTemplate(is_string($invoiceType) ? $invoiceType : null);
 
         $this->generateSummary()
             ->addCautionDepositReference()
@@ -106,9 +107,12 @@ class XRechnungGenerator
         $entity = $this->xRechnungEntity;
         $amountPrefix = $entity->getInvoiceType() == 'cancel' ? '-' : '';
 
-        $signedAmount = static fn (mixed $value): string => $amountPrefix == '-' && (float) $value < 0
-            ? number_format(abs((float) $value), 2, '.', '')
-            : number_format((float) $value, 2, '.', '');
+        $signedAmount = static function (mixed $value) use ($amountPrefix): string {
+            $float = self::asFloat($value);
+            return $amountPrefix == '-' && $float < 0
+                ? number_format(abs($float), 2, '.', '')
+                : number_format($float, 2, '.', '');
+        };
 
         $this->xmlContent = self::fill($this->xmlContent, '{INVOICE_NUMBER}', $entity->getInvoiceNumber());
         $this->xmlContent = self::fill($this->xmlContent, '{RELATED_INVOICE_NUMBER}', $entity->getRelatedInvoiceNumber());
@@ -147,7 +151,7 @@ class XRechnungGenerator
                 $cautionReferenceTemplate .= self::fill(
                     XRechnungTemplate::getCautionDepositEntityTemplate(),
                     '{REFERENCE_NUMBER}',
-                    ($item['invoice_number_prefix'] ?? '') . ($item['invoice_number'] ?? '')
+                    self::asString($item['invoice_number_prefix'] ?? '') . self::asString($item['invoice_number'] ?? '')
                 );
             }
         }
@@ -158,7 +162,7 @@ class XRechnungGenerator
                 $depositReferenceTemplate .= self::fill(
                     XRechnungTemplate::getCautionDepositEntityTemplate(),
                     '{REFERENCE_NUMBER}',
-                    ($item['invoice_number_prefix'] ?? '') . ($item['invoice_number'] ?? '')
+                    self::asString($item['invoice_number_prefix'] ?? '') . self::asString($item['invoice_number'] ?? '')
                 );
             }
         }
@@ -241,7 +245,7 @@ class XRechnungGenerator
 
                 $invoiceLine = self::fill($invoiceLine, '{ITEM_NUMBER}', $lineItem->getItemNumber());
                 $invoiceLine = self::fill($invoiceLine, '{ITEM_QUANTITY}', $lineItem->getItemQuantity());
-                $invoiceLine = self::fill($invoiceLine, '{ITEM_PRICE}', number_format((float) $lineItem->getItemPrice(), 2, '.', ''));
+                $invoiceLine = self::fill($invoiceLine, '{ITEM_PRICE}', number_format(self::asFloat($lineItem->getItemPrice()), 2, '.', ''));
                 $invoiceLine = self::fill($invoiceLine, '{ITEM_START_DATE}', $lineItem->getItemStartDate());
                 $invoiceLine = self::fill($invoiceLine, '{ITEM_END_DATE}', $lineItem->getItemEndDate());
                 $invoiceLine = self::fill($invoiceLine, '{ITEM_DESCRIPTION}', $lineItem->getItemDescription());
@@ -250,10 +254,10 @@ class XRechnungGenerator
                 $invoiceLine = self::fill($invoiceLine, '{ITEM_TAX}', $lineItem->getItemTax());
                 $invoiceLine = self::fill($invoiceLine, '{ITEM_TAX_SCHEME}', $lineItem->getItemTaxScheme());
 
-                $unitPrice = number_format((float) $lineItem->getItemUnitPrice(), 2, '.', '');
+                $unitPrice = number_format(self::asFloat($lineItem->getItemUnitPrice()), 2, '.', '');
                 $allowanceCharge = '';
                 if ($lineItem->getItemAllowanceCharge() != 0) {
-                    $unitPrice = (string) $lineItem->getItemUnitPrice();
+                    $unitPrice = self::asString($lineItem->getItemUnitPrice());
                 }
 
                 $invoiceLine = self::fill($invoiceLine, '{ITEM_UNIT_PRICE}', $unitPrice);
@@ -293,16 +297,36 @@ class XRechnungGenerator
             '/<(\w+:)?\w+[^>]*>\s*<\/\1?\w+>/',
             '',
             $this->xmlContent
-        );
+        ) ?? $this->xmlContent;
     }
 
     /**
-     * Substitute one placeholder in $haystack, coercing null to ''. PHP 8.4
-     * deprecates passing null to str_replace's $replace; entity getters can
-     * return null whenever a field is not set.
+     * Substitute one placeholder in $haystack, narrowing $value to a string.
+     * PHP 8.4 deprecates passing null to str_replace's $replace, and entity
+     * getters can return any scalar (or null) since the lifted L3 entity is
+     * still loosely typed (A3 will tighten this).
      */
     private static function fill(string $haystack, string $placeholder, mixed $value): string
     {
-        return str_replace($placeholder, (string) ($value ?? ''), $haystack);
+        return str_replace($placeholder, self::asString($value), $haystack);
+    }
+
+    private static function asString(mixed $value): string
+    {
+        if ($value === null) {
+            return '';
+        }
+        if (is_scalar($value)) {
+            return (string) $value;
+        }
+        if (is_object($value) && method_exists($value, '__toString')) {
+            return (string) $value;
+        }
+        return '';
+    }
+
+    private static function asFloat(mixed $value): float
+    {
+        return is_numeric($value) ? (float) $value : 0.0;
     }
 }

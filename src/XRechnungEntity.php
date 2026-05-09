@@ -4,535 +4,542 @@ namespace XrechnungKit;
 
 class XRechnungEntity
 {
-    private $invoiceNumber;
-    private $invoiceDate;
-    private $typeCode;
-    private $customerNumber;
-    private $note;
-    private $currencyCode;
-    private $buyerReferenceNumber;
-    private $paymentCode;
-    private $financialNumber;
-    private $paymentNote;
-    private $taxCategory;
-    private $tax;
-    private $taxScheme;
-    private $netAmount;
-    private $taxAmount;
-    private $grossAmount;
-    private $downPayment;
-    private $payableAmount;
-    private $cautionDocuments;
-    private $depositDocuments;
-    private $supplierEmail;
-    private $supplierCompanyName;
-    private $supplierStreet;
-    private $supplierCity;
-    private $supplierZip;
-    private $supplierCountryCode;
-    private $supplierCompanyId;
-    private $supplierVat;
-    private $supplierName;
-    private $supplierPhone;
-    private $buyerMail;
-    private $buyerNumber;
-    private $buyerStreet;
-    private $buyerAdditionalStreet;
-    private $buyerCity;
-    private $buyerZip;
-    private $buyerCountryCode;
-    private $buyerCompanyName;
-    private $buyerName;
-    private $buyerPhone;
-    private $buyerEmail;
+    private mixed $invoiceNumber = null;
+    private mixed $invoiceDate = null;
+    private mixed $typeCode = null;
+    private mixed $customerNumber = null;
+    private mixed $note = null;
+    private mixed $currencyCode = null;
+    private mixed $buyerReferenceNumber = null;
+    private mixed $paymentCode = null;
+    private mixed $financialNumber = null;
+    private mixed $paymentNote = null;
+    private mixed $taxCategory = null;
+    private mixed $tax = null;
+    private mixed $taxScheme = null;
+    private mixed $netAmount = null;
+    private mixed $taxAmount = null;
+    private mixed $grossAmount = null;
+    private mixed $downPayment = null;
+    private mixed $payableAmount = null;
+    /** @var array<int, array<string, mixed>> */
+    private array $cautionDocuments = [];
+    /** @var array<int, array<string, mixed>> */
+    private array $depositDocuments = [];
+    private mixed $supplierEmail = null;
+    private mixed $supplierCompanyName = null;
+    private mixed $supplierStreet = null;
+    private mixed $supplierCity = null;
+    private mixed $supplierZip = null;
+    private mixed $supplierCountryCode = null;
+    private mixed $supplierCompanyId = null;
+    private mixed $supplierVat = null;
+    private mixed $supplierName = null;
+    private mixed $supplierPhone = null;
+    private mixed $buyerMail = null;
+    private mixed $buyerNumber = null;
+    private mixed $buyerStreet = null;
+    private mixed $buyerAdditionalStreet = null;
+    private mixed $buyerCity = null;
+    private mixed $buyerZip = null;
+    private mixed $buyerCountryCode = null;
+    private mixed $buyerCompanyName = null;
+    private mixed $buyerName = null;
+    private mixed $buyerPhone = null;
+    private mixed $buyerEmail = null;
 
-    private $lineItems = [];
+    /** @var list<XRechnungInvoiceLineItem> */
+    private array $lineItems = [];
 
-    private $invoiceType;
+    private mixed $invoiceType = null;
 
-    private $relatedInvoiceNumber;
+    private mixed $relatedInvoiceNumber = null;
 
-    public function getTypeCode()
+    public function getTypeCode(): mixed
     {
         return $this->typeCode;
     }
 
-    public function setTypeCode($typeCode): XRechnungEntity
+    public function setTypeCode(mixed $typeCode): XRechnungEntity
     {
         $this->typeCode = $typeCode;
         return $this;
     }
 
-    public function getNote()
+    public function getNote(): mixed
     {
         return $this->note;
     }
 
-    public function setNote($note): XRechnungEntity
+    public function setNote(mixed $note): XRechnungEntity
     {
         $this->note = $note;
         return $this;
     }
 
-    public function getCurrencyCode()
+    public function getCurrencyCode(): mixed
     {
         return $this->currencyCode;
     }
 
-    public function setCurrencyCode($currencyCode): XRechnungEntity
+    public function setCurrencyCode(mixed $currencyCode): XRechnungEntity
     {
         $this->currencyCode = $currencyCode;
         return $this;
     }
 
-    public function getBuyerReferenceNumber()
+    public function getBuyerReferenceNumber(): mixed
     {
         return $this->buyerReferenceNumber;
     }
 
-    public function setBuyerReferenceNumber($buyerReferenceNumber): XRechnungEntity
+    public function setBuyerReferenceNumber(mixed $buyerReferenceNumber): XRechnungEntity
     {
         $this->buyerReferenceNumber = $buyerReferenceNumber;
         return $this;
     }
 
-    public function getPaymentCode()
+    public function getPaymentCode(): mixed
     {
         return $this->paymentCode;
     }
 
-    public function setPaymentCode($paymentCode): XRechnungEntity
+    public function setPaymentCode(mixed $paymentCode): XRechnungEntity
     {
         $this->paymentCode = $paymentCode;
         return $this;
     }
 
-    public function getFinancialNumber()
+    public function getFinancialNumber(): mixed
     {
         return $this->financialNumber;
     }
 
-    public function setFinancialNumber($financialNumber): XRechnungEntity
+    public function setFinancialNumber(mixed $financialNumber): XRechnungEntity
     {
         $this->financialNumber = $financialNumber;
         return $this;
     }
 
-    public function getPaymentNote()
+    public function getPaymentNote(): mixed
     {
         return $this->paymentNote;
     }
 
-    public function setPaymentNote($paymentNote): XRechnungEntity
+    public function setPaymentNote(mixed $paymentNote): XRechnungEntity
     {
         $this->paymentNote = $paymentNote;
         return $this;
     }
 
-    public function getTaxCategory()
+    public function getTaxCategory(): mixed
     {
         return $this->taxCategory;
     }
 
-    public function setTaxCategory($taxCategory): XRechnungEntity
+    public function setTaxCategory(mixed $taxCategory): XRechnungEntity
     {
         $this->taxCategory = $taxCategory;
         return $this;
     }
 
-    public function getTax()
+    public function getTax(): mixed
     {
         return $this->tax;
     }
 
-    public function setTax($tax): XRechnungEntity
+    public function setTax(mixed $tax): XRechnungEntity
     {
         $this->tax = $tax;
         return $this;
     }
 
-    public function getTaxScheme()
+    public function getTaxScheme(): mixed
     {
         return $this->taxScheme;
     }
 
-    public function setTaxScheme($taxScheme): XRechnungEntity
+    public function setTaxScheme(mixed $taxScheme): XRechnungEntity
     {
         $this->taxScheme = $taxScheme;
         return $this;
     }
 
-    public function getDownPayment()
+    public function getDownPayment(): mixed
     {
         return $this->downPayment;
     }
 
-    public function setDownPayment($downPayment): XRechnungEntity
+    public function setDownPayment(mixed $downPayment): XRechnungEntity
     {
         $this->downPayment = $downPayment;
         return $this;
     }
 
-    public function getPayableAmount()
+    public function getPayableAmount(): mixed
     {
         return $this->payableAmount;
     }
 
-    public function setPayableAmount($payableAmount): XRechnungEntity
+    public function setPayableAmount(mixed $payableAmount): XRechnungEntity
     {
         $this->payableAmount = $payableAmount;
         return $this;
     }
 
+    /** @return array<int, array<string, mixed>> */
     public function getCautionDocuments(): array
     {
         return $this->cautionDocuments;
     }
 
+    /** @param array<int, array<string, mixed>> $cautionDocuments */
     public function setCautionDocuments(array $cautionDocuments = []): XRechnungEntity
     {
         $this->cautionDocuments = $cautionDocuments;
         return $this;
     }
 
+    /** @return array<int, array<string, mixed>> */
     public function getDepositDocuments(): array
     {
         return $this->depositDocuments;
     }
 
+    /** @param array<int, array<string, mixed>> $depositDocuments */
     public function setDepositDocuments(array $depositDocuments = []): XRechnungEntity
     {
         $this->depositDocuments = $depositDocuments;
         return $this;
     }
 
-    public function getSupplierEmail()
+    public function getSupplierEmail(): mixed
     {
         return $this->supplierEmail;
     }
 
-    public function setSupplierEmail($supplierEmail): XRechnungEntity
+    public function setSupplierEmail(mixed $supplierEmail): XRechnungEntity
     {
         $this->supplierEmail = $supplierEmail;
         return $this;
     }
 
-    public function getSupplierCompanyName()
+    public function getSupplierCompanyName(): mixed
     {
         return $this->supplierCompanyName;
     }
 
-    public function setSupplierCompanyName($supplierCompanyName): XRechnungEntity
+    public function setSupplierCompanyName(mixed $supplierCompanyName): XRechnungEntity
     {
         $this->supplierCompanyName = $supplierCompanyName;
         return $this;
     }
 
-    public function getSupplierStreet()
+    public function getSupplierStreet(): mixed
     {
         return $this->supplierStreet;
     }
 
-    public function setSupplierStreet($supplierStreet): XRechnungEntity
+    public function setSupplierStreet(mixed $supplierStreet): XRechnungEntity
     {
         $this->supplierStreet = $supplierStreet;
         return $this;
     }
 
-    public function getSupplierCity()
+    public function getSupplierCity(): mixed
     {
         return $this->supplierCity;
     }
 
-    public function setSupplierCity($supplierCity): XRechnungEntity
+    public function setSupplierCity(mixed $supplierCity): XRechnungEntity
     {
         $this->supplierCity = $supplierCity;
         return $this;
     }
 
-    public function getSupplierZip()
+    public function getSupplierZip(): mixed
     {
         return $this->supplierZip;
     }
 
-    public function setSupplierZip($supplierZip): XRechnungEntity
+    public function setSupplierZip(mixed $supplierZip): XRechnungEntity
     {
         $this->supplierZip = $supplierZip;
         return $this;
     }
 
-    public function getSupplierCountryCode()
+    public function getSupplierCountryCode(): mixed
     {
         return $this->supplierCountryCode;
     }
 
-    public function setSupplierCountryCode($supplierCountryCode): XRechnungEntity
+    public function setSupplierCountryCode(mixed $supplierCountryCode): XRechnungEntity
     {
         $this->supplierCountryCode = $supplierCountryCode;
         return $this;
     }
 
-    public function getSupplierCompanyId()
+    public function getSupplierCompanyId(): mixed
     {
         return $this->supplierCompanyId;
     }
 
-    public function setSupplierCompanyId($supplierCompanyId): XRechnungEntity
+    public function setSupplierCompanyId(mixed $supplierCompanyId): XRechnungEntity
     {
         $this->supplierCompanyId = $supplierCompanyId;
         return $this;
     }
 
-    public function getSupplierVat()
+    public function getSupplierVat(): mixed
     {
         return $this->supplierVat;
     }
 
-    public function setSupplierVat($supplierVat): XRechnungEntity
+    public function setSupplierVat(mixed $supplierVat): XRechnungEntity
     {
         $this->supplierVat = $supplierVat;
         return $this;
     }
 
-    public function getSupplierName()
+    public function getSupplierName(): mixed
     {
         return $this->supplierName;
     }
 
-    public function setSupplierName($supplierName): XRechnungEntity
+    public function setSupplierName(mixed $supplierName): XRechnungEntity
     {
         $this->supplierName = $supplierName;
         return $this;
     }
 
-    public function getSupplierPhone()
+    public function getSupplierPhone(): mixed
     {
         return $this->supplierPhone;
     }
 
-    public function setSupplierPhone($supplierPhone): XRechnungEntity
+    public function setSupplierPhone(mixed $supplierPhone): XRechnungEntity
     {
         $this->supplierPhone = $supplierPhone;
         return $this;
     }
 
-    public function getBuyerMail()
+    public function getBuyerMail(): mixed
     {
         return $this->buyerMail;
     }
 
-    public function setBuyerMail($buyerMail): XRechnungEntity
+    public function setBuyerMail(mixed $buyerMail): XRechnungEntity
     {
         $this->buyerMail = $buyerMail;
         return $this;
     }
 
-    public function getBuyerNumber()
+    public function getBuyerNumber(): mixed
     {
         return $this->buyerNumber;
     }
 
-    public function setBuyerNumber($buyerNumber): XRechnungEntity
+    public function setBuyerNumber(mixed $buyerNumber): XRechnungEntity
     {
         $this->buyerNumber = $buyerNumber;
         return $this;
     }
 
-    public function getBuyerStreet()
+    public function getBuyerStreet(): mixed
     {
         return $this->buyerStreet;
     }
 
-    public function setBuyerStreet($buyerStreet): XRechnungEntity
+    public function setBuyerStreet(mixed $buyerStreet): XRechnungEntity
     {
         $this->buyerStreet = $buyerStreet;
         return $this;
     }
 
-    public function getBuyerAdditionalStreet()
+    public function getBuyerAdditionalStreet(): mixed
     {
         return $this->buyerAdditionalStreet;
     }
 
-    public function setBuyerAdditionalStreet($buyerAdditionalStreet): XRechnungEntity
+    public function setBuyerAdditionalStreet(mixed $buyerAdditionalStreet): XRechnungEntity
     {
         $this->buyerAdditionalStreet = $buyerAdditionalStreet;
         return $this;
     }
 
-    public function getBuyerCity()
+    public function getBuyerCity(): mixed
     {
         return $this->buyerCity;
     }
 
-    public function setBuyerCity($buyerCity): XRechnungEntity
+    public function setBuyerCity(mixed $buyerCity): XRechnungEntity
     {
         $this->buyerCity = $buyerCity;
         return $this;
     }
 
-    public function getBuyerZip()
+    public function getBuyerZip(): mixed
     {
         return $this->buyerZip;
     }
 
-    public function setBuyerZip($buyerZip): XRechnungEntity
+    public function setBuyerZip(mixed $buyerZip): XRechnungEntity
     {
         $this->buyerZip = $buyerZip;
         return $this;
     }
 
-    public function getBuyerCountryCode()
+    public function getBuyerCountryCode(): mixed
     {
         return $this->buyerCountryCode;
     }
 
-    public function setBuyerCountryCode($buyerCountryCode): XRechnungEntity
+    public function setBuyerCountryCode(mixed $buyerCountryCode): XRechnungEntity
     {
         $this->buyerCountryCode = $buyerCountryCode;
         return $this;
     }
 
-    public function getBuyerCompanyName()
+    public function getBuyerCompanyName(): mixed
     {
         return $this->buyerCompanyName;
     }
 
-    public function setBuyerCompanyName($buyerCompanyName): XRechnungEntity
+    public function setBuyerCompanyName(mixed $buyerCompanyName): XRechnungEntity
     {
         $this->buyerCompanyName = $buyerCompanyName;
         return $this;
     }
 
-    public function getBuyerPhone()
+    public function getBuyerPhone(): mixed
     {
         return $this->buyerPhone;
     }
 
-    public function setBuyerPhone($buyerPhone): XRechnungEntity
+    public function setBuyerPhone(mixed $buyerPhone): XRechnungEntity
     {
         $this->buyerPhone = $buyerPhone;
         return $this;
     }
 
-    public function getBuyerEmail()
+    public function getBuyerEmail(): mixed
     {
         return $this->buyerEmail;
     }
 
-    public function setBuyerEmail($buyerEmail): XRechnungEntity
+    public function setBuyerEmail(mixed $buyerEmail): XRechnungEntity
     {
         $this->buyerEmail = $buyerEmail;
         return $this;
     }
 
+    /** @return list<XRechnungInvoiceLineItem> */
     public function getLineItems(): array
     {
         return $this->lineItems;
     }
 
-    public function addLineItem(XRechnungInvoiceLineItem $lineItem)
+    public function addLineItem(XRechnungInvoiceLineItem $lineItem): void
     {
         $this->lineItems[] = $lineItem;
     }
 
-    public function getInvoiceNumber()
+    public function getInvoiceNumber(): mixed
     {
         return $this->invoiceNumber;
     }
 
-    public function setInvoiceNumber($invoiceNumber): XRechnungEntity
+    public function setInvoiceNumber(mixed $invoiceNumber): XRechnungEntity
     {
         $this->invoiceNumber = $invoiceNumber;
         return $this;
     }
 
-    public function getInvoiceDate()
+    public function getInvoiceDate(): mixed
     {
         return $this->invoiceDate;
     }
 
-    public function setInvoiceDate($invoiceDate): XRechnungEntity
+    public function setInvoiceDate(mixed $invoiceDate): XRechnungEntity
     {
         $this->invoiceDate = $invoiceDate;
         return $this;
     }
 
-    public function getCustomerNumber()
+    public function getCustomerNumber(): mixed
     {
         return $this->customerNumber;
     }
 
-    public function setCustomerNumber($customerNumber): XRechnungEntity
+    public function setCustomerNumber(mixed $customerNumber): XRechnungEntity
     {
         $this->customerNumber = $customerNumber;
         return $this;
     }
 
-    public function getNetAmount()
+    public function getNetAmount(): mixed
     {
         return $this->netAmount;
     }
 
-    public function setNetAmount($netAmount): XRechnungEntity
+    public function setNetAmount(mixed $netAmount): XRechnungEntity
     {
         $this->netAmount = $netAmount;
         return $this;
     }
 
-    public function getTaxAmount()
+    public function getTaxAmount(): mixed
     {
         return $this->taxAmount;
     }
 
-    public function setTaxAmount($taxAmount): XRechnungEntity
+    public function setTaxAmount(mixed $taxAmount): XRechnungEntity
     {
         $this->taxAmount = $taxAmount;
         return $this;
     }
 
-    public function getGrossAmount()
+    public function getGrossAmount(): mixed
     {
         return $this->grossAmount;
     }
 
-    public function setGrossAmount($grossAmount): XRechnungEntity
+    public function setGrossAmount(mixed $grossAmount): XRechnungEntity
     {
         $this->grossAmount = $grossAmount;
         return $this;
     }
 
-    public function getBuyerName()
+    public function getBuyerName(): mixed
     {
         return $this->buyerName;
     }
 
-    public function setBuyerName($buyerName): XRechnungEntity
+    public function setBuyerName(mixed $buyerName): XRechnungEntity
     {
         $this->buyerName = $buyerName;
         return $this;
     }
 
-    public function getInvoiceType()
+    public function getInvoiceType(): mixed
     {
         return $this->invoiceType;
     }
 
-    public function setInvoiceType($invoiceType): XRechnungEntity
+    public function setInvoiceType(mixed $invoiceType): XRechnungEntity
     {
         $this->invoiceType = $invoiceType;
         return $this;
     }
 
-    public function getRelatedInvoiceNumber()
+    public function getRelatedInvoiceNumber(): mixed
     {
         return $this->relatedInvoiceNumber;
     }
 
-    public function setRelatedInvoiceNumber($relatedInvoiceNumber): XRechnungEntity
+    public function setRelatedInvoiceNumber(mixed $relatedInvoiceNumber): XRechnungEntity
     {
         $this->relatedInvoiceNumber = $relatedInvoiceNumber;
         return $this;
     }
-
 }

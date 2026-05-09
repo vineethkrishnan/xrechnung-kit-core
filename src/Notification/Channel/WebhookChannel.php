@@ -78,7 +78,7 @@ final class WebhookChannel implements NotificationChannelInterface
             $context = \stream_context_create([
                 'http' => [
                     'method' => 'POST',
-                    'header' => implode("\r\n", $headers),
+                    'header' => implode("\r\n", array_map(static fn (mixed $v): string => is_scalar($v) ? (string) $v : '', $headers)),
                     'content' => $body,
                     'timeout' => 5,
                     'ignore_errors' => true,

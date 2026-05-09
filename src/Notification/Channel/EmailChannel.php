@@ -60,7 +60,7 @@ final class EmailChannel implements NotificationChannelInterface
     private static function defaultMailer(): \Closure
     {
         return static function (string $to, string $subject, string $body, array $headers): void {
-            \mail($to, $subject, $body, implode("\r\n", $headers));
+            \mail($to, $subject, $body, implode("\r\n", array_map(static fn (mixed $v): string => is_scalar($v) ? (string) $v : '', $headers)));
         };
     }
 }

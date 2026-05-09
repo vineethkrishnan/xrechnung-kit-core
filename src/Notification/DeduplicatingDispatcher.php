@@ -14,6 +14,9 @@ final class DeduplicatingDispatcher implements NotificationDispatcherInterface
     /** @var array<string, int> signature -> unix timestamp of last emission */
     private array $lastEmitted = [];
 
+    /**
+     * @param (\Closure(): int)|null $clock Injectable now() for deterministic tests; defaults to time().
+     */
     public function __construct(
         private readonly NotificationDispatcherInterface $inner,
         private readonly int $ttlSeconds = 1800,

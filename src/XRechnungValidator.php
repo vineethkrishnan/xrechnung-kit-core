@@ -10,9 +10,10 @@ namespace XrechnungKit;
  */
 class XRechnungValidator
 {
-    private $xsdFile;
+    private string $xsdFile;
 
-    private $errors = [];
+    /** @var array<int, string> */
+    private array $errors = [];
 
     /**
      * @param string $xsdFile Optional override for the XSD file path. Defaults to the bundled XRechnungSchema.xsd.
@@ -96,7 +97,7 @@ class XRechnungValidator
      * Replace the entire error set. Used by callers that want to reset state
      * between validation runs without instantiating a new validator.
      *
-     * @param array $errors An array of error messages.
+     * @param array<int, string> $errors An array of error messages.
      */
     public function setErrors(array $errors): void
     {
