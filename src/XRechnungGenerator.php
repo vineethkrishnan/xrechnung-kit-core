@@ -17,6 +17,7 @@ class XRechnungGenerator
 {
     private $xRechnungEntity;
     private $validator;
+    private AtomicWriter $writer;
     private LoggerInterface $logger;
     private NotificationDispatcherInterface $notifications;
 
@@ -28,29 +29,34 @@ class XRechnungGenerator
         XRechnungEntity $xRechnungEntity,
         ?XRechnungValidator $validator = null,
         ?LoggerInterface $logger = null,
-        ?NotificationDispatcherInterface $notifications = null
+        ?NotificationDispatcherInterface $notifications = null,
+        ?AtomicWriter $writer = null
     ) {
         $this->xRechnungEntity = $xRechnungEntity;
-        if (!$validator) {
-            $validator = new XRechnungValidator();
-        }
-        $this->validator = $validator;
+        $this->validator = $validator ?? new XRechnungValidator();
+        $this->writer = $writer ?? new AtomicWriter();
         $this->logger = $logger ?? new NullLogger();
         $this->notifications = $notifications ?? new ChannelDispatcher();
     }
 
     /**
-     * Generates an XRechnung XML file with invoice data.
+     * Builds the XRechnung XML in memory, validates it against the bundled
+     * UBL XSD, then atomically lands it on disk:
      *
-     * @param string $fileName The full path of the XML file to be written.
-     * @return string The path of the generated XML file.
+     * - Valid XML -> $fileName (and any pre-existing _invalid sibling is removed).
+     * - Invalid XML -> the *_invalid.xml sibling (and any pre-existing valid
+     *   file at $fileName is removed). The pipeline never presents invalid XML
+     *   at the caller-supplied target name.
+     *
+     * 'cancel' invoice type writes to $fileName without validation, preserving
+     * the L3 behaviour. A4 will revisit whether cancel docs should validate.
+     *
+     * @return string The path the XML was written to (either $fileName or its quarantine sibling).
      */
     public function generateXRechnung(string $fileName = 'XRechnung.xml'): string
     {
-
         $this->xmlContent = XRechnungTemplate::getTemplate($this->xRechnungEntity->getInvoiceType());
 
-        // Replace placeholders with actual data from XRechnungEntity
         $this->generateSummary()
             ->addCautionDepositReference()
             ->addSupplierParty()
@@ -58,40 +64,36 @@ class XRechnungGenerator
             ->addInvoiceLineItem()
             ->clean();
 
-        // the filename contains the complete path, so we need to create the directory if it does not exist when putting the file
-        $directory = dirname($fileName);
-        if (!file_exists($directory)) {
-            @mkdir($directory, 0755, true);
-        }
-        file_put_contents($fileName, $this->xmlContent);
-
-        if ($this->xRechnungEntity->getInvoiceType() == 'cancel') { // for cancel we need to return the file name
-            return $fileName;
+        $type = $this->xRechnungEntity->getInvoiceType();
+        if ($type == 'cancel') {
+            return $this->writer->write($this->xmlContent, $fileName, true);
         }
 
-        // Validate the XML against the XSD schema
-        if (!$this->validator->validate($fileName)) {
+        $isValid = $this->validator->validateContent($this->xmlContent);
+        $finalPath = $this->writer->write($this->xmlContent, $fileName, $isValid);
+
+        if (!$isValid) {
             $errors = $this->validator->getErrors();
-            $body = "An invalid XRechnung XML file was generated and stored for inspection.\n";
-            $body .= "File: {$fileName}\n";
+            $body = "An invalid XRechnung XML file was generated and quarantined for inspection.\n";
+            $body .= "File: {$finalPath}\n";
             $body .= "Errors:\n";
             foreach ($errors as $error) {
                 $body .= "- $error\n";
             }
-            $this->logger->info($body, ['scope' => 'xrechnung', 'file' => $fileName]);
+            $this->logger->info($body, ['scope' => 'xrechnung', 'file' => $finalPath]);
             $this->notifications->dispatch(new Notification(
                 title: 'XRechnung validation failed',
                 body: $body,
                 severity: Severity::Error,
                 context: [
-                    'file' => $fileName,
+                    'file' => $finalPath,
                     'invoiceNumber' => $this->xRechnungEntity->getInvoiceNumber(),
                     'errors' => $errors,
                 ],
             ));
         }
 
-        return $fileName;
+        return $finalPath;
     }
 
     /**

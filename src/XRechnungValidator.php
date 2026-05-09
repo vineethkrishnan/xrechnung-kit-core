@@ -3,7 +3,10 @@
 namespace XrechnungKit;
 
 /**
- * Class for validating XML files against the XRechnung XSD schema.
+ * Validates XRechnung XML against the bundled UBL XSD schema. Both an
+ * in-memory entry point (validateContent) and a file-path entry point
+ * (validate) are provided; the file-path variant is a thin convenience
+ * wrapper around the in-memory one.
  */
 class XRechnungValidator
 {
@@ -12,9 +15,7 @@ class XRechnungValidator
     private $errors = [];
 
     /**
-     * Constructor to initialize the path to the XSD file.
-     *
-     * @param string $xsdFile The path to the XSD file.
+     * @param string $xsdFile Optional override for the XSD file path. Defaults to the bundled XRechnungSchema.xsd.
      */
     public function __construct(string $xsdFile = '')
     {
@@ -25,35 +26,60 @@ class XRechnungValidator
     }
 
     /**
-     * Validates the provided XML file against the XSD schema.
-     *
-     * @param string $xmlFile The path to the XML file to validate.
-     * @return bool True if valid, false otherwise.
+     * In-memory validation. Loads the XML string into a DOMDocument and
+     * runs schemaValidate against the configured XSD. No filesystem I/O
+     * other than reading the XSD itself.
+     */
+    public function validateContent(string $xml): bool
+    {
+        $this->errors = [];
+
+        $document = new \DOMDocument();
+        $previousInternalErrors = libxml_use_internal_errors(true);
+        libxml_clear_errors();
+
+        $parsed = $document->loadXML($xml, LIBXML_NONET);
+        if (!$parsed) {
+            foreach (libxml_get_errors() as $error) {
+                $this->setError($this->formatLibxmlError($error));
+            }
+            libxml_clear_errors();
+            libxml_use_internal_errors($previousInternalErrors);
+            return false;
+        }
+
+        $isValid = $document->schemaValidate($this->xsdFile);
+        if (!$isValid) {
+            foreach (libxml_get_errors() as $error) {
+                $this->setError($this->formatLibxmlError($error));
+            }
+        }
+        libxml_clear_errors();
+        libxml_use_internal_errors($previousInternalErrors);
+
+        return $isValid;
+    }
+
+    /**
+     * Convenience wrapper: read a file from disk, then validateContent.
+     * Returns false if the file does not exist or cannot be read.
      */
     public function validate(string $xmlFile): bool
     {
-        $xml = new \DOMDocument();
-        $xml->load($xmlFile);
-
-        libxml_use_internal_errors(true);
-        $isValid = $xml->schemaValidate($this->xsdFile);
-        if ($isValid) {
-            return true;
+        if (!is_file($xmlFile) || !is_readable($xmlFile)) {
+            $this->errors = ["Cannot read XML file: {$xmlFile}"];
+            return false;
         }
-
-        foreach (libxml_get_errors() as $error) {
-            $this->setError($this->formatLibxmlError($error));
+        $contents = file_get_contents($xmlFile);
+        if ($contents === false) {
+            $this->errors = ["Failed to read XML file: {$xmlFile}"];
+            return false;
         }
-        libxml_clear_errors();
-
-        return false;
+        return $this->validateContent($contents);
     }
 
     /**
      * Formats libxml error messages.
-     *
-     * @param \LibXMLError $error The libxml error object.
-     * @return string The formatted error message.
      */
     private function formatLibxmlError(\LibXMLError $error): string
     {
@@ -67,31 +93,23 @@ class XRechnungValidator
     }
 
     /**
-     * Sets the errors.
+     * Replace the entire error set. Used by callers that want to reset state
+     * between validation runs without instantiating a new validator.
      *
      * @param array $errors An array of error messages.
-     * @return void
      */
     public function setErrors(array $errors): void
     {
         $this->errors = $errors;
     }
 
-    /**
-     * Adds a formatted LibXML error message to the errors array.
-     *
-     * @param string $formatLibxmlError The formatted LibXML error message.
-     * @return void
-     */
-    private function setError(string $formatLibxmlError)
+    private function setError(string $formatLibxmlError): void
     {
         $this->errors[] = $formatLibxmlError;
     }
 
     /**
-     * Retrieves an array of errors.
-     *
-     * @return array An array of error messages.
+     * @return array<int, string> The errors collected by the most recent validate / validateContent call.
      */
     public function getErrors(): array
     {
