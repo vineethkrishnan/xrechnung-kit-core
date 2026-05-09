@@ -35,15 +35,15 @@ final class XRechnungBuilder
 
         $entity->setInvoiceType(self::deriveInvoiceTypeString($data));
         $entity->setTypeCode($data->meta->type->value);
-        $entity->setInvoiceNumber($data->meta->invoiceNumber);
+        $entity->setInvoiceNumber(self::sanitize($data->meta->invoiceNumber));
         $entity->setInvoiceDate($data->meta->issueDate->format('Y-m-d'));
         $entity->setCurrencyCode($data->meta->currency);
-        $entity->setBuyerReferenceNumber($data->meta->buyerReference ?? '');
-        $entity->setCustomerNumber($data->meta->buyerReference ?? '');
-        $entity->setNote($data->meta->note ?? '');
+        $entity->setBuyerReferenceNumber(self::sanitize($data->meta->buyerReference ?? ''));
+        $entity->setCustomerNumber(self::sanitize($data->meta->buyerReference ?? ''));
+        $entity->setNote(self::sanitize($data->meta->note ?? ''));
 
         if ($data->prior !== null) {
-            $entity->setRelatedInvoiceNumber($data->prior->invoiceNumber);
+            $entity->setRelatedInvoiceNumber(self::sanitize($data->prior->invoiceNumber));
         }
 
         $tax = $data->taxes[0] ?? null;
@@ -60,41 +60,41 @@ final class XRechnungBuilder
         $entity->setDownPayment($data->totals->prepaid !== null ? $data->totals->prepaid->amount : '0.00');
 
         $seller = $data->seller;
-        $entity->setSupplierCompanyName($seller->name);
-        $entity->setSupplierStreet($seller->address->street);
-        $entity->setSupplierCity($seller->address->city);
-        $entity->setSupplierZip($seller->address->zip);
+        $entity->setSupplierCompanyName(self::sanitize($seller->name));
+        $entity->setSupplierStreet(self::sanitize($seller->address->street));
+        $entity->setSupplierCity(self::sanitize($seller->address->city));
+        $entity->setSupplierZip(self::sanitize($seller->address->zip));
         $entity->setSupplierCountryCode($seller->address->countryCode);
-        $entity->setSupplierEmail($seller->endpointEmail ?? '');
+        $entity->setSupplierEmail(self::sanitize($seller->endpointEmail ?? ''));
         if ($seller->taxId !== null) {
-            $entity->setSupplierVat($seller->taxId->companyId);
-            $entity->setSupplierCompanyId($seller->taxId->companyId);
+            $entity->setSupplierVat(self::sanitize($seller->taxId->companyId));
+            $entity->setSupplierCompanyId(self::sanitize($seller->taxId->companyId));
         }
         if ($seller->contact !== null) {
-            $entity->setSupplierName($seller->contact->name ?? '');
-            $entity->setSupplierPhone($seller->contact->phone ?? '');
+            $entity->setSupplierName(self::sanitize($seller->contact->name ?? ''));
+            $entity->setSupplierPhone(self::sanitize($seller->contact->phone ?? ''));
         }
 
         $buyer = $data->buyer;
-        $entity->setBuyerCompanyName($buyer->name);
-        $entity->setBuyerStreet($buyer->address->street);
-        $entity->setBuyerAdditionalStreet($buyer->address->additionalStreet ?? '');
-        $entity->setBuyerCity($buyer->address->city);
-        $entity->setBuyerZip($buyer->address->zip);
+        $entity->setBuyerCompanyName(self::sanitize($buyer->name));
+        $entity->setBuyerStreet(self::sanitize($buyer->address->street));
+        $entity->setBuyerAdditionalStreet(self::sanitize($buyer->address->additionalStreet ?? ''));
+        $entity->setBuyerCity(self::sanitize($buyer->address->city));
+        $entity->setBuyerZip(self::sanitize($buyer->address->zip));
         $entity->setBuyerCountryCode($buyer->address->countryCode);
-        $entity->setBuyerMail($buyer->endpointEmail ?? '');
-        $entity->setBuyerNumber($buyer->leitwegId ?? '');
+        $entity->setBuyerMail(self::sanitize($buyer->endpointEmail ?? ''));
+        $entity->setBuyerNumber(self::sanitize($buyer->leitwegId ?? ''));
         if ($buyer->contact !== null) {
-            $entity->setBuyerName($buyer->contact->name ?? '');
-            $entity->setBuyerPhone($buyer->contact->phone ?? '');
-            $entity->setBuyerEmail($buyer->contact->email ?? '');
+            $entity->setBuyerName(self::sanitize($buyer->contact->name ?? ''));
+            $entity->setBuyerPhone(self::sanitize($buyer->contact->phone ?? ''));
+            $entity->setBuyerEmail(self::sanitize($buyer->contact->email ?? ''));
         }
 
         $first = $data->payment[0] ?? null;
         if ($first !== null) {
             $entity->setPaymentCode($first->code->value);
-            $entity->setFinancialNumber($first->iban ?? '');
-            $entity->setPaymentNote($first->paymentReference ?? '');
+            $entity->setFinancialNumber(self::sanitize($first->iban ?? ''));
+            $entity->setPaymentNote(self::sanitize($first->paymentReference ?? ''));
         }
 
         $entity->setCautionDocuments([]);
@@ -110,9 +110,9 @@ final class XRechnungBuilder
     private static function buildLineItem(LineItem $line): XRechnungInvoiceLineItem
     {
         $item = (new XRechnungInvoiceLineItem())
-            ->setItemNumber($line->id)
-            ->setItemDescription($line->description)
-            ->setItemResource($line->name ?? $line->description)
+            ->setItemNumber(self::sanitize($line->id))
+            ->setItemDescription(self::sanitize($line->description))
+            ->setItemResource(self::sanitize($line->name ?? $line->description))
             ->setItemQuantity($line->quantity)
             ->setItemUnitPrice($line->unitPrice->amount)
             ->setItemPrice($line->lineTotal->amount)
@@ -130,6 +130,36 @@ final class XRechnungBuilder
         }
 
         return $item;
+    }
+
+    /**
+     * Defense-in-depth for the str_replace based template substitution in
+     * the lifted Generator. Two passes:
+     *
+     * 1. Strip XML 1.0 forbidden control characters (\x00-\x08, \x0B, \x0C,
+     *    \x0E-\x1F). These bytes are illegal in XML 1.0 and would produce
+     *    invalid output that the validator quarantines; stripping them
+     *    pre-emptively is friendlier than failing late.
+     *
+     * 2. XML-escape the five reserved characters (& < > " ') via
+     *    htmlspecialchars with ENT_QUOTES | ENT_XML1 | ENT_SUBSTITUTE.
+     *    The L3 generator inserts values via str_replace which does no
+     *    escaping; without this pass, hostile or accidental special
+     *    characters in string fields would emit malformed XML and trigger
+     *    the quarantine path.
+     *
+     * Numeric / date / enum-coded fields skip this helper because they go
+     * through their own constrained representations (Money decimal string,
+     * DateTimeImmutable format, backed enum value) and do not contain XML
+     * specials by construction.
+     */
+    private static function sanitize(string $value): string
+    {
+        $stripped = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', '', $value);
+        if ($stripped === null) {
+            $stripped = $value;
+        }
+        return htmlspecialchars($stripped, ENT_QUOTES | ENT_XML1 | ENT_SUBSTITUTE, 'UTF-8');
     }
 
     /**
