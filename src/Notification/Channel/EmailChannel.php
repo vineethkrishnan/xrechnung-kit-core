@@ -37,6 +37,7 @@ final class EmailChannel implements NotificationChannelInterface
             : self::defaultMailer();
     }
 
+    #[\Override]
     public function send(Notification $notification): void
     {
         try {
@@ -52,6 +53,7 @@ final class EmailChannel implements NotificationChannelInterface
         }
     }
 
+    #[\Override]
     public function name(): string
     {
         return $this->name;

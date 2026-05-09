@@ -2,7 +2,7 @@
 
 namespace XrechnungKit;
 
-class XRechnungEntity
+final class XRechnungEntity
 {
     private mixed $invoiceNumber = null;
     private mixed $invoiceDate = null;

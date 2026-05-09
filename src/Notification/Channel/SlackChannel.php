@@ -42,6 +42,7 @@ final class SlackChannel implements NotificationChannelInterface
             : self::defaultHttpClient();
     }
 
+    #[\Override]
     public function send(Notification $notification): void
     {
         $payload = [
@@ -63,6 +64,7 @@ final class SlackChannel implements NotificationChannelInterface
         }
     }
 
+    #[\Override]
     public function name(): string
     {
         return $this->name;

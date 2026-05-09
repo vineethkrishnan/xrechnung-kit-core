@@ -7,7 +7,7 @@ namespace XrechnungKit;
  * If a custom template file exists, its content is retrieved. Otherwise, a default
  * template content is provided.
  */
-class XRechnungTemplate
+final class XRechnungTemplate
 {
     private static function templatesDir(): string
     {

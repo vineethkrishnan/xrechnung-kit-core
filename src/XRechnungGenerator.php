@@ -13,7 +13,7 @@ use XrechnungKit\Notification\Severity;
  * XRechnungGenerator is responsible for generating XRechnung XML files
  * using the data provided by the XRechnungEntity.
  */
-class XRechnungGenerator
+final class XRechnungGenerator
 {
     private XRechnungEntity $xRechnungEntity;
     private XRechnungValidator $validator;

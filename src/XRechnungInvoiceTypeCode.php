@@ -8,7 +8,7 @@ namespace XrechnungKit;
  * This class represents different types of invoice codes used in XRechnung. Each constant within
  * the class corresponds to a specific type of invoice, identified by a unique numerical code.
  */
-class XRechnungInvoiceTypeCode
+final class XRechnungInvoiceTypeCode
 {
 
     public const REQUEST_FRO_PAYMENT = 71;

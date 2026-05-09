@@ -15,11 +15,13 @@ final class GeneratorSmokeTest extends TestCase
 {
     private string $outputPath;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->outputPath = sys_get_temp_dir() . '/xrechnung-kit-smoke-' . uniqid('', true) . '.xml';
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         $invalidPath = preg_replace('/\.xml$/', '_invalid.xml', $this->outputPath);

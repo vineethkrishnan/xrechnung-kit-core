@@ -26,12 +26,14 @@ final class QuarantineBehaviorTest extends TestCase
     private string $outputPath;
     private string $invalidPath;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->outputPath = sys_get_temp_dir() . '/xrechnung-kit-quarantine-' . uniqid('', true) . '.xml';
         $this->invalidPath = AtomicWriter::quarantinePath($this->outputPath);
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         foreach ([$this->outputPath, $this->invalidPath] as $f) {
@@ -96,7 +98,8 @@ final class QuarantineBehaviorTest extends TestCase
 
         $generator->generateXRechnung($this->outputPath);
 
-        $stragglers = glob(\dirname($this->outputPath) . DIRECTORY_SEPARATOR . '.xrechnung_kit_*.tmp') ?: [];
+        $matches = glob(\dirname($this->outputPath) . DIRECTORY_SEPARATOR . '.xrechnung_kit_*.tmp');
+        $stragglers = $matches === false ? [] : $matches;
         self::assertSame([], $stragglers, 'AtomicWriter must not leave a .tmp straggler in the target directory');
     }
 
@@ -108,16 +111,19 @@ final class QuarantineBehaviorTest extends TestCase
                 parent::__construct();
             }
 
+            #[\Override]
             public function validateContent(string $xml): bool
             {
                 return $this->verdict;
             }
 
+            #[\Override]
             public function validate(string $xmlFile): bool
             {
                 return $this->verdict;
             }
 
+            #[\Override]
             public function getErrors(): array
             {
                 return $this->verdict ? [] : ['stub: forced invalid for test'];

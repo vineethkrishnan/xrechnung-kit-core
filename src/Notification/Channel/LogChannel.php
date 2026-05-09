@@ -21,6 +21,7 @@ final class LogChannel implements NotificationChannelInterface
     ) {
     }
 
+    #[\Override]
     public function send(Notification $notification): void
     {
         $message = '[' . $notification->title . '] ' . $notification->body;
@@ -33,6 +34,7 @@ final class LogChannel implements NotificationChannelInterface
         };
     }
 
+    #[\Override]
     public function name(): string
     {
         return $this->name;

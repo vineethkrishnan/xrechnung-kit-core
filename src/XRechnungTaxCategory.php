@@ -2,7 +2,7 @@
 
 namespace XrechnungKit;
 
-class XRechnungTaxCategory
+final class XRechnungTaxCategory
 {
     public const VAT_REVERSE_CHARGE = 'AE';
     public const STANDARD_RATE = 'S';

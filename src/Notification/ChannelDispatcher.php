@@ -26,6 +26,7 @@ final class ChannelDispatcher implements NotificationDispatcherInterface
         return $clone;
     }
 
+    #[\Override]
     public function dispatch(Notification $notification): void
     {
         foreach ($this->channels as $channel) {

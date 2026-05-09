@@ -53,6 +53,7 @@ final class WebhookChannel implements NotificationChannelInterface
             : self::defaultHttpClient();
     }
 
+    #[\Override]
     public function send(Notification $notification): void
     {
         try {
@@ -67,6 +68,7 @@ final class WebhookChannel implements NotificationChannelInterface
         }
     }
 
+    #[\Override]
     public function name(): string
     {
         return $this->name;

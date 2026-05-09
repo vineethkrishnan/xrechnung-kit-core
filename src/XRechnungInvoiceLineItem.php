@@ -2,7 +2,7 @@
 
 namespace XrechnungKit;
 
-class XRechnungInvoiceLineItem
+final class XRechnungInvoiceLineItem
 {
     private mixed $itemNumber = null;
     private mixed $itemQuantity = null;

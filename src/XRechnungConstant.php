@@ -2,7 +2,7 @@
 
 namespace XrechnungKit;
 
-class XRechnungConstant
+final class XRechnungConstant
 {
 
     // Payment means codes

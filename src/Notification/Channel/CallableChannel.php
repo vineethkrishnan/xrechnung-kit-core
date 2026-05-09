@@ -27,6 +27,7 @@ final class CallableChannel implements NotificationChannelInterface
         $this->sender = \Closure::fromCallable($sender);
     }
 
+    #[\Override]
     public function send(Notification $notification): void
     {
         try {
@@ -36,6 +37,7 @@ final class CallableChannel implements NotificationChannelInterface
         }
     }
 
+    #[\Override]
     public function name(): string
     {
         return $this->name;

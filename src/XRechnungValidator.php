@@ -39,6 +39,11 @@ class XRechnungValidator
         $previousInternalErrors = libxml_use_internal_errors(true);
         libxml_clear_errors();
 
+        if ($xml === '') {
+            $this->errors = ['Cannot validate empty XML string'];
+            libxml_use_internal_errors($previousInternalErrors);
+            return false;
+        }
         $parsed = $document->loadXML($xml, LIBXML_NONET);
         if (!$parsed) {
             foreach (libxml_get_errors() as $error) {

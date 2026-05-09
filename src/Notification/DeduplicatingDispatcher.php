@@ -24,6 +24,7 @@ final class DeduplicatingDispatcher implements NotificationDispatcherInterface
     ) {
     }
 
+    #[\Override]
     public function dispatch(Notification $notification): void
     {
         $now = $this->now();
