@@ -26,6 +26,7 @@
     "suggest": {
         "psr/log": "Wire your application's PSR-3 logger into the validator alert pipeline.",
         "vineethkrishnan/xrechnung-kit-kosit-bundle": "Adds KoSIT Schematron validation alongside the bundled UBL XSD validation.",
+        "vineethkrishnan/xrechnung-kit-pdfa": "PDF/A-3 hybrid invoice support: embed the XRechnung XML inside a visual PDF, framework-agnostic.",
         "vineethkrishnan/xrechnung-kit-laravel": "Laravel service provider, facade, and queueable job.",
         "vineethkrishnan/xrechnung-kit-symfony": "Symfony bundle and DI extension.",
         "vineethkrishnan/xrechnung-kit-cakephp": "CakePHP plugin and service.",
