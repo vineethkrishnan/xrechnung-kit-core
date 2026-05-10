@@ -8,7 +8,7 @@
 
 This is the framework-agnostic core of [xrechnung-kit](https://github.com/vineethkrishnan/xrechnung-kit). It turns a typed PHP value object describing an invoice into a KoSIT-strict valid XRechnung 3.0 / EN 16931 XML document, validates the output in memory before writing to disk, and quarantines invalid output.
 
-This package is intentionally minimal. It has no framework dependencies and no runtime network calls. Framework adapters (Laravel, Symfony, CakePHP, Laminas) and the optional KoSIT Schematron bundle are published as separate packages from the same monorepo.
+This package is intentionally minimal. It has no framework dependencies and no runtime network calls. Framework adapters (Laravel, Symfony, CakePHP, Laminas), platform integrations (TYPO3, Shopware 6, WordPress / WooCommerce, Contenido CMS), and the optional KoSIT Schematron bundle are published as separate packages from the same monorepo.
 
 ## Installation
 
@@ -31,12 +31,21 @@ composer require vineethkrishnan/xrechnung-kit-cakephp
 composer require vineethkrishnan/xrechnung-kit-laminas
 ```
 
+Platform integrations (CMS and e-commerce):
+
+```bash
+composer require vineethkrishnan/xrechnung-kit-typo3
+composer require vineethkrishnan/xrechnung-kit-shopware
+composer require vineethkrishnan/xrechnung-kit-wordpress
+composer require vineethkrishnan/xrechnung-kit-contenido
+```
+
 ## Quick start
 
 ```php
 use XrechnungKit\Builder\XRechnungBuilder;
-use XrechnungKit\Generator\XRechnungGenerator;
-use XrechnungKit\Validator\XRechnungValidator;
+use XrechnungKit\XRechnungGenerator;
+use XrechnungKit\XRechnungValidator;
 
 $mappingData = (new MyInvoiceMapper($invoice, $customer))->produce();
 
