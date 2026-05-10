@@ -71,7 +71,7 @@ Source, issues, docs, and PRs live in the monorepo: [vineethkrishnan/xrechnung-k
 
 This repo (`xrechnung-kit-core`) is an auto-generated split of the monorepo's `core/` subtree, published for Packagist. **Do not open PRs here**; open them against the monorepo.
 
-- Documentation: [docs/](https://github.com/vineethkrishnan/xrechnung-kit/tree/main/docs)
+- Documentation: [xrechnung-kit.vineethnk.in](https://xrechnung-kit.vineethnk.in/)
 - Issues: [github.com/vineethkrishnan/xrechnung-kit/issues](https://github.com/vineethkrishnan/xrechnung-kit/issues)
 - Contributing: [CONTRIBUTING.md](https://github.com/vineethkrishnan/xrechnung-kit/blob/main/CONTRIBUTING.md)
 - Security disclosure: [SECURITY.md](https://github.com/vineethkrishnan/xrechnung-kit/blob/main/SECURITY.md)
