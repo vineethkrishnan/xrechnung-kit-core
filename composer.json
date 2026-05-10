@@ -32,7 +32,8 @@
         "vineethkrishnan/xrechnung-kit-laminas": "Laminas module and service factory.",
         "vineethkrishnan/xrechnung-kit-typo3": "TYPO3 extension and Symfony DI service.",
         "vineethkrishnan/xrechnung-kit-shopware": "Shopware 6 plugin and order workflow integration.",
-        "vineethkrishnan/xrechnung-kit-wordpress": "WordPress plugin with WooCommerce order integration."
+        "vineethkrishnan/xrechnung-kit-wordpress": "WordPress plugin with WooCommerce order integration.",
+        "vineethkrishnan/xrechnung-kit-contenido": "Contenido CMS plugin and service class."
     },
     "autoload": {
         "psr-4": {
