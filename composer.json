@@ -29,7 +29,10 @@
         "vineethkrishnan/xrechnung-kit-laravel": "Laravel service provider, facade, and queueable job.",
         "vineethkrishnan/xrechnung-kit-symfony": "Symfony bundle and DI extension.",
         "vineethkrishnan/xrechnung-kit-cakephp": "CakePHP plugin and service.",
-        "vineethkrishnan/xrechnung-kit-laminas": "Laminas module and service factory."
+        "vineethkrishnan/xrechnung-kit-laminas": "Laminas module and service factory.",
+        "vineethkrishnan/xrechnung-kit-typo3": "TYPO3 extension and Symfony DI service.",
+        "vineethkrishnan/xrechnung-kit-shopware": "Shopware 6 plugin and order workflow integration.",
+        "vineethkrishnan/xrechnung-kit-wordpress": "WordPress plugin with WooCommerce order integration."
     },
     "autoload": {
         "psr-4": {
