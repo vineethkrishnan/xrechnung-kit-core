@@ -4,12 +4,12 @@
     "type": "library",
     "license": "MIT",
     "keywords": ["xrechnung", "en16931", "e-invoicing", "peppol", "ubl", "germany", "invoicing"],
-    "homepage": "https://github.com/vineethkrishnan/xrechnung-kit",
+    "homepage": "https://github.com/vinelabs-de/xrechnung-kit",
     "support": {
-        "issues": "https://github.com/vineethkrishnan/xrechnung-kit/issues",
-        "source": "https://github.com/vineethkrishnan/xrechnung-kit",
+        "issues": "https://github.com/vinelabs-de/xrechnung-kit/issues",
+        "source": "https://github.com/vinelabs-de/xrechnung-kit",
         "docs": "https://xrechnung-kit.vineethnk.in/",
-        "security": "https://github.com/vineethkrishnan/xrechnung-kit/blob/main/SECURITY.md"
+        "security": "https://github.com/vinelabs-de/xrechnung-kit/blob/main/SECURITY.md"
     },
     "authors": [
         { "name": "Vineeth N K", "email": "me@vineethnk.in", "role": "Maintainer" }
