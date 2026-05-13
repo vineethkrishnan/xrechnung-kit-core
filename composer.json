@@ -1,5 +1,5 @@
 {
-    "name": "vineethkrishnan/xrechnung-kit-core",
+    "name": "vinelabs-de/xrechnung-kit",
     "description": "EN 16931 / XRechnung 3.0 compliant e-invoice generator and validator. Framework-agnostic core.",
     "type": "library",
     "license": "MIT",

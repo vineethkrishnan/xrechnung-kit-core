@@ -1,8 +1,8 @@
-# xrechnung-kit-core
+# xrechnung-kit
 
 > EN 16931 / XRechnung 3.0 compliant e-invoice generator and validator for PHP. Framework-agnostic core.
 
-[![Packagist](https://img.shields.io/packagist/v/vineethkrishnan/xrechnung-kit-core.svg)](https://packagist.org/packages/vineethkrishnan/xrechnung-kit-core)
+[![Packagist](https://img.shields.io/packagist/v/vinelabs-de/xrechnung-kit.svg)](https://packagist.org/packages/vinelabs-de/xrechnung-kit)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/vineethkrishnan/xrechnung-kit/blob/main/LICENSE)
 [![PHP Version](https://img.shields.io/badge/php-%3E%3D8.1-8892bf.svg)](https://www.php.net/supported-versions)
 
@@ -13,7 +13,7 @@ This package is intentionally minimal. It has no framework dependencies and no r
 ## Installation
 
 ```bash
-composer require vineethkrishnan/xrechnung-kit-core
+composer require vinelabs-de/xrechnung-kit
 ```
 
 Optional KoSIT Schematron validation:
@@ -78,7 +78,7 @@ Document classes supported:
 
 Source, issues, docs, and PRs live in the monorepo: [vineethkrishnan/xrechnung-kit](https://github.com/vineethkrishnan/xrechnung-kit).
 
-This repo (`xrechnung-kit-core`) is an auto-generated split of the monorepo's `core/` subtree, published for Packagist. **Do not open PRs here**; open them against the monorepo.
+This repo (`vinelabs-de/xrechnung-kit`) is an auto-generated split of the monorepo's `core/` subtree, published for Packagist. **Do not open PRs here**; open them against the monorepo.
 
 - Documentation: [xrechnung-kit.vineethnk.in](https://xrechnung-kit.vineethnk.in/)
 - API reference: [overview](https://xrechnung-kit.vineethnk.in/reference/api) and [generated per-class reference](https://xrechnung-kit.vineethnk.in/api/)
